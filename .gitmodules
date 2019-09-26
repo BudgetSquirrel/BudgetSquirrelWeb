@@ -1,0 +1,3 @@
+[submodule "BudgetTracker"]
+	path = BudgetTracker
+	url = https://github.com/BudgetSquirrel/BudgetTracker.git
