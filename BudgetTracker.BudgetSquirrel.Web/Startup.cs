@@ -1,7 +1,11 @@
+using BudgetTracker.Business.Ports.Repositories;
+using BudgetTracker.Data.EntityFramework.Repositories;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +39,22 @@ namespace BudgetTracker.BudgetSquirrel.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
+        public virtual void ConfigureAuth(IServiceCollection services)
+        {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+
+                    });
+        }
+
+        public virtual void ConfigureAdapters(IServiceCollection services)
+        {
+            services.AddTransient<IBudgetRepository, BudgetRepository>();
+            services.AddTransient<ITransactionRepository, TransactionRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -52,6 +72,8 @@ namespace BudgetTracker.BudgetSquirrel.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }

@@ -1,0 +1,12 @@
+﻿@page
+@model BudgetTracker.BudgetSquirrel.Web.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<form asp-page-handler="register" method="post">
+    <input name="name" />
+    <input name="username" />
+    <input name="password" />
+    <button type="submit" value="submit" />
+</form>
