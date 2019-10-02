@@ -1,55 +1,51 @@
+using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.Auth;
-using BudgetTracker.Business.Ports;
+using BudgetTracker.Business.Ports.Repositories;
 
 using System;
 using System.Collections.Generic;
-using System.Http;
+using System.Web;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BudgetTracker.BudgetSquirrel.Web.Pages
 {
-    public class RegisterModel : PageModel
+    public class LoginModel : PageModel
     {
-        private IUserRepository _userRepository;
+        public const string PageName = "Login";
 
-        public RegisterModel(IUserRepository userRepo)
+        private IUserRepository _userRepository;
+        private ILoginService _loginService;
+
+        public LoginModel(IUserRepository userRepo, ILoginService loginService)
         {
             _userRepository = userRepo;
+            _loginService = loginService;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task OnGet()
         {
         }
 
-        public async Task<IActionResult> OnPostLogin()
+        public async Task<IActionResult> OnPost()
         {
-            // string username = Request["Username"];
-            // string password = Request["Password"];
+            string username = Request.Form["Username"];
+            string password = Request.Form["Password"];
+            username = username != "" ? username : "user1";
+            password = password != "" ? password : "user1234";
 
-            User authenticatedUser = new User()
+            User loggedInUser = await _loginService.Login(username, password);
+            if (loggedInUser == null)
             {
-                Email = "user1@gmail.com",
-                UserName = "user1"
-            };
-
-            List<Claim> claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, email),
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Email, email)
-            };
-
-            ClaimsIdentity identity = ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(principal);
-
-            return RedirectToPage("Index");
+                TempData["FailedLogin"] = true;
+                return RedirectToPage();
+            }
+            return RedirectToPage(IndexModel.PageName);
         }
     }
 }

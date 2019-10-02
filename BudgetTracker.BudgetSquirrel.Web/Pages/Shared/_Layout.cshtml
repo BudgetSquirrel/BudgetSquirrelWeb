@@ -9,6 +9,31 @@
 </head>
 <body>
 
+    <header>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div>
+                Hello
+                @Html.Raw(ViewData["UserFullName"] + "!")
+            </div>
+            <form class="" asp-page="Logout" method="post">
+                <button type="submit" name="logout">Logout</button>
+            </form>
+        }
+        else
+        {
+            @if (TempData["FailedLogin"] != null && (bool)TempData["FailedLogin"] == true)
+            {
+                <div><p>Those credentials are incorrect.</p></div>
+            }
+            <form asp-page="Login" method="post">
+                <input name="username" />
+                <input type="password" name="password" />
+                <button type="submit">Login</button>
+            </form>
+        }
+    </header>
+
     <main role="main">
         @RenderBody()
     </main>

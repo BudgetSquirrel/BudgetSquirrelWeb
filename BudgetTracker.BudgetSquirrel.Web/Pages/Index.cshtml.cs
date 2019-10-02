@@ -1,3 +1,4 @@
+using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.Auth;
 using BudgetTracker.Business.Budgeting;
 using BudgetTracker.Business.Transactions;
@@ -12,20 +13,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BudgetTracker.BudgetSquirrel.Web.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
+        public const string PageName = "Index";
+
         private IBudgetRepository _budgetRepository;
         private ITransactionRepository _transactionRepository;
         private IUserRepository _userRepository;
 
         public Budget RootBudget { get; set; }
 
+        public Dictionary<Guid, List<Transaction>> TransactionsByBudget { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
         public IndexModel(IBudgetRepository budgetRepo, IUserRepository userRepo,
-            ITransactionRepository transactionRepo)
+            ITransactionRepository transactionRepo, ILoginService loginService)
+            : base(loginService)
         {
             _budgetRepository = budgetRepo;
             _transactionRepository = transactionRepo;
@@ -37,9 +43,14 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             (StartDate, EndDate) = GetDateWindow();
         }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            IActionResult loginRedirect;
+            if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
+
             await Initialize();
+
+            return Page();
         }
 
         protected virtual (DateTime, DateTime) GetDateWindow()
@@ -58,7 +69,8 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
         {
             foreach (Budget budget in budgets.ToList())
             {
-                budget.Transactions = await budget.GetTransactions(StartDate, EndDate, _transactionRepository);
+                IEnumerable<Transaction> fetchedTransactions = await budget.GetTransactions(StartDate, EndDate, _transactionRepository);
+                TransactionsByBudget[budget.Id] = fetchedTransactions.ToList();
                 await LoadTransactions(budget.SubBudgets);
             }
         }

@@ -1,4 +1,7 @@
+using BudgetTracker.BudgetSquirrel.Data;
+using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.Ports.Repositories;
+using BudgetTracker.Data.EntityFramework;
 using BudgetTracker.Data.EntityFramework.Repositories;
 
 using System;
@@ -11,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,21 +39,30 @@ namespace BudgetTracker.BudgetSquirrel.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            ConfigureAdapters(services);
+            ConfigureAuth(services);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddHttpContextAccessor();
         }
 
         public virtual void ConfigureAuth(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(options =>
-                    {
+            .AddCookie(options =>
+            {
 
-                    });
+            });
+            services.AddTransient<ILoginService, LoginService>();
         }
 
         public virtual void ConfigureAdapters(IServiceCollection services)
         {
+            services.AddDbContext<BudgetTrackerContext, AppDbContext>(options =>
+            {
+                options.UseSqlite(Configuration.GetConnectionString("Default"));
+            });
+
             services.AddTransient<IBudgetRepository, BudgetRepository>();
             services.AddTransient<ITransactionRepository, TransactionRepository>();
             services.AddTransient<IUserRepository, UserRepository>();

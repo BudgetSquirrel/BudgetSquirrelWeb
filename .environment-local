@@ -1,0 +1,9 @@
+#!/bin/bash
+
+PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Run the web app locally.
+dev_up() {
+    cd $PROJECT_DIR
+    dotnet run -p BudgetTracker.BudgetSquirrel.Web/BudgetTracker.BudgetSquirrel.Web.csproj
+}

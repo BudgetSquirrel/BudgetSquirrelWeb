@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
   </ItemGroup>
 
 
@@ -16,6 +17,7 @@
     <ProjectReference Include="..\BudgetTracker\BudgetTracker.Business\BudgetTracker.Business.csproj" />
     <ProjectReference Include="..\BudgetTracker\BudgetTracker.Data.EntityFramework\BudgetTracker.Data.EntityFramework.csproj" />
     <ProjectReference Include="..\BudgetTracker\GateKeeper\GateKeeper.csproj" />
+    <ProjectReference Include="..\BudgetTracker.BudgetSquirrel.BudgetApp\BudgetTracker.BudgetSquirrel.BudgetApp.csproj" />
   </ItemGroup>
 
 </Project>

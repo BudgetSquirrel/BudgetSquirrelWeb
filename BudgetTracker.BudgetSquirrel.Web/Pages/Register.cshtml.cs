@@ -1,10 +1,11 @@
 using BudgetTracker.Business.Auth;
-using BudgetTracker.Business.Ports;
+using BudgetTracker.Business.Ports.Repositories;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -19,7 +20,7 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             _userRepository = userRepo;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task OnGet()
         {
         }
 
@@ -27,8 +28,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
         {
             // User user = new User()
             // {
-            //     UserName =
+            //     Username =
             // };
+            return RedirectToPage("Index");
         }
     }
 }
