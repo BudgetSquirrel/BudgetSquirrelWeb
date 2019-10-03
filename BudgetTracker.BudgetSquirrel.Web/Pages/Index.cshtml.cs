@@ -1,3 +1,4 @@
+using BudgetTracker.BudgetSquirrel.Application;
 using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.Auth;
 using BudgetTracker.Business.Budgeting;
@@ -17,11 +18,13 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
     {
         public const string PageName = "Index";
 
-        private IBudgetRepository _budgetRepository;
         private ITransactionRepository _transactionRepository;
         private IUserRepository _userRepository;
+        private BudgetService _budgetService;
 
+        public Guid? RootBudgetId { get; set; }
         public Budget RootBudget { get; set; }
+        public List<Budget> AvailableRootBudgets { get; set; }
 
         public Dictionary<Guid, List<Transaction>> TransactionsByBudget { get; set; }
 
@@ -29,22 +32,42 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
 
         public DateTime EndDate { get; set; }
 
-        public IndexModel(IBudgetRepository budgetRepo, IUserRepository userRepo,
-            ITransactionRepository transactionRepo, ILoginService loginService)
+        public IndexModel(IUserRepository userRepo, ITransactionRepository transactionRepo,
+            ILoginService loginService, BudgetService budgetService)
             : base(loginService)
         {
-            _budgetRepository = budgetRepo;
             _transactionRepository = transactionRepo;
             _userRepository = userRepo;
+            _budgetService = budgetService;
         }
 
         protected async Task Initialize()
         {
+            if (RootBudgetId != null)
+            {
+                RootBudget = await _budgetService.GetBudgetTree(RootBudgetId.Value);
+            }
+            else
+            {
+                List<Budget> rootBudgets = await _budgetService.GetRootBudgets(CurrentUser.Id.Value);
+                if (rootBudgets.Count() == 1)
+                {
+                    // User only has 1 root budget so just automatically choose that one.
+                    await InitializeAsImpliedRootBudgetDetail(rootBudgets.First());
+                }
+                else
+                {
+                    // User has multiple or no root budgets so show the list for
+                    // them to select the one to view.
+                    AvailableRootBudgets = rootBudgets;
+                }
+            }
             (StartDate, EndDate) = GetDateWindow();
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGet(Guid? bid)
         {
+            RootBudgetId = bid;
             IActionResult loginRedirect;
             if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
 
@@ -73,6 +96,12 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
                 TransactionsByBudget[budget.Id] = fetchedTransactions.ToList();
                 await LoadTransactions(budget.SubBudgets);
             }
+        }
+
+        protected virtual async Task InitializeAsImpliedRootBudgetDetail(Budget chosenRootBudget)
+        {
+            RootBudgetId = chosenRootBudget.Id;
+            RootBudget = await _budgetService.GetBudgetTree(chosenRootBudget);
         }
     }
 }

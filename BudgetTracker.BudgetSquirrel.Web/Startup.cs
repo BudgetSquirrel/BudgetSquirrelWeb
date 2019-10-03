@@ -1,3 +1,4 @@
+using BudgetTracker.BudgetSquirrel.Application;
 using BudgetTracker.BudgetSquirrel.Data;
 using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.Ports.Repositories;
@@ -41,6 +42,8 @@ namespace BudgetTracker.BudgetSquirrel.Web
 
             ConfigureAdapters(services);
             ConfigureAuth(services);
+
+            services.AddTransient<BudgetService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();

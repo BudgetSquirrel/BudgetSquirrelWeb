@@ -1,5 +1,27 @@
 ﻿@page
+
+@using BudgetTracker.Business.Budgeting
+
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+}
+
+@if (Model.RootBudgetId == null)
+{
+    <div>
+        @foreach (Budget budget in Model.AvailableRootBudgets)
+        {
+            <div>@budget.Name - @budget.Id</div>
+        }
+    </div>
+}
+else
+{
+    <div>
+        <h1>Root Budget</h1>
+        <p>
+            @Model.RootBudget.Name - @Model.RootBudget.Id
+        </p>
+    </div>
 }
