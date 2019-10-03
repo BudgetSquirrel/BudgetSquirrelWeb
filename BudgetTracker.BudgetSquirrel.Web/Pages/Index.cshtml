@@ -1,5 +1,6 @@
 ﻿@page
 
+@using BudgetTracker.BudgetSquirrel.Web.ViewComponents
 @using BudgetTracker.Business.Budgeting
 
 @model IndexModel
@@ -20,8 +21,8 @@ else
 {
     <div>
         <h1>Root Budget</h1>
-        <p>
-            @Model.RootBudget.Name - @Model.RootBudget.Id
-        </p>
+        @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
+            new { transactionsByBudget = Model.TransactionsByBudget,
+                    budget = Model.RootBudget })
     </div>
 }

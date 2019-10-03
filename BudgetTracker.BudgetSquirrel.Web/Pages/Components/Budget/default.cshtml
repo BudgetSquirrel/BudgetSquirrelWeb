@@ -1,0 +1,25 @@
+@using BudgetTracker.BudgetSquirrel.Application
+@using BudgetTracker.BudgetSquirrel.Web.ViewComponents
+@using BudgetTracker.Business.Budgeting
+
+@model BudgetViewModel
+
+<div>
+    <div>
+        <p>@Model.Budget.Name</p>
+        <p>
+            Amount In:
+            @Html.Raw("$" + Model.Budget.SetAmount)
+        </p>
+        <p>
+            Balance:
+            @Html.Raw("$" + Model.Budget.FundBalance)
+        </p>
+    </div>
+    @foreach (Budget subBudget in @Model.Budget.SubBudgets)
+    {
+        @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
+            new { transactionsByBudget = Model.TransactionsByBudget,
+                    budget = subBudget });
+    }
+</div>
