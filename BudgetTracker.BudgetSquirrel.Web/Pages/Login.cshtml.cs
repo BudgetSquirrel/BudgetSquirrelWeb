@@ -28,7 +28,7 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             _loginService = loginService;
         }
 
-        public async Task OnGet()
+        public void OnGet()
         {
         }
 

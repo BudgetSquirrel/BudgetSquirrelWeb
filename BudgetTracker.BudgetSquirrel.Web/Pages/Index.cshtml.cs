@@ -23,10 +23,8 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
         private BudgetService _budgetService;
 
         public Guid? RootBudgetId { get; set; }
-        public Budget RootBudget { get; set; }
+        public BudgetViewModel RootBudget { get; set; }
         public List<Budget> AvailableRootBudgets { get; set; }
-
-        public Dictionary<Guid, List<Transaction>> TransactionsByBudget { get; set; }
 
         public DateTime StartDate { get; set; }
 
@@ -45,7 +43,8 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
         {
             if (RootBudgetId != null)
             {
-                RootBudget = await _budgetService.GetBudgetTree(RootBudgetId.Value);
+                RootBudget = await _budgetService.GetBudgetTree(RootBudgetId.Value,
+                                                                StartDate, EndDate);
             }
             else
             {
@@ -65,9 +64,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             (StartDate, EndDate) = GetDateWindow();
         }
 
-        public async Task<IActionResult> OnGet(Guid? bid)
+        public async Task<IActionResult> OnGet(Guid? budgetId)
         {
-            RootBudgetId = bid;
+            RootBudgetId = budgetId;
             IActionResult loginRedirect;
             if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
 
@@ -88,20 +87,11 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             return (start, end);
         }
 
-        protected virtual async Task LoadTransactions(IEnumerable<Budget> budgets)
-        {
-            foreach (Budget budget in budgets.ToList())
-            {
-                IEnumerable<Transaction> fetchedTransactions = await budget.GetTransactions(StartDate, EndDate, _transactionRepository);
-                TransactionsByBudget[budget.Id] = fetchedTransactions.ToList();
-                await LoadTransactions(budget.SubBudgets);
-            }
-        }
-
         protected virtual async Task InitializeAsImpliedRootBudgetDetail(Budget chosenRootBudget)
         {
             RootBudgetId = chosenRootBudget.Id;
-            RootBudget = await _budgetService.GetBudgetTree(chosenRootBudget);
+            RootBudget = await _budgetService.GetBudgetTree(chosenRootBudget,
+                                                            StartDate, EndDate);
         }
     }
 }

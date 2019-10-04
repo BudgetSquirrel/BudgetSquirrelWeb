@@ -16,10 +16,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.ViewComponents
 
         public BudgetViewModel Budget { get; set; }
 
-        public async Task<IViewComponentResult> InvokeAsync(Budget budget,
-            Dictionary<Guid, List<Transaction>> transactionsByBudget)
+        public IViewComponentResult Invoke(BudgetViewModel budget)
         {
-            Budget = new BudgetViewModel(budget, transactionsByBudget);
+            Budget = budget;
             return View(Budget);
         }
     }

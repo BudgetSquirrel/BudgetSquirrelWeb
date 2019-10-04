@@ -12,6 +12,14 @@
             @Html.Raw("$" + Model.Budget.SetAmount)
         </p>
         <p>
+            Amount Out:
+            @Html.Raw("$" + (-1*Model.TransactionsTotal))
+        </p>
+        <p>
+            Left To Spend:
+            @Html.Raw("$" + Model.BudgetAmountLeft)
+        </p>
+        <p>
             Balance:
             @Html.Raw("$" + Model.Budget.FundBalance)
         </p>
@@ -19,7 +27,6 @@
     @foreach (Budget subBudget in @Model.Budget.SubBudgets)
     {
         @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
-            new { transactionsByBudget = Model.TransactionsByBudget,
-                    budget = subBudget });
+            new { budget = Model.GetSubBudgetViewModel(subBudget.Id) });
     }
 </div>

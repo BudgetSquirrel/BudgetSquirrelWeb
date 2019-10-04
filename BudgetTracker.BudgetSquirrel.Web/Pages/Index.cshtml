@@ -22,7 +22,6 @@ else
     <div>
         <h1>Root Budget</h1>
         @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
-            new { transactionsByBudget = Model.TransactionsByBudget,
-                    budget = Model.RootBudget })
+            new { budget = Model.RootBudget })
     </div>
 }

@@ -28,16 +28,45 @@ namespace BudgetTracker.BudgetSquirrel.Application
             return _budgetRepository.GetRootBudgets(userId);
         }
 
-        public async Task<Budget> GetBudgetTree(Guid rootBudgetId)
+        public async Task<BudgetViewModel> GetBudgetTree(Guid rootBudgetId,
+            DateTime budgetPeriodStart, DateTime budgetPeriodEnd)
         {
             Budget rootBudget = await _budgetRepository.GetBudget(rootBudgetId);
-            return await GetBudgetTree(rootBudget);
+            return await GetBudgetTree(rootBudget, budgetPeriodStart, budgetPeriodEnd);
         }
 
-        public async Task<Budget> GetBudgetTree(Budget rootBudget)
+        public async Task<BudgetViewModel> GetBudgetTree(Budget rootBudget,
+            DateTime budgetPeriodStart, DateTime budgetPeriodEnd)
         {
+            BudgetViewModel budgetVM = new BudgetViewModel(rootBudget, null);
             await _budgetRepository.LoadSubBudgets(rootBudget, true);
-            return rootBudget;
+            budgetVM.TransactionsByBudget = await LoadTransactions(new List<Budget>() { rootBudget },
+                                    budgetPeriodStart, budgetPeriodEnd);
+            return budgetVM;
+        }
+
+        public async Task<Dictionary<Guid, List<Transaction>>> LoadTransactions(IEnumerable<Budget> budgets,
+            DateTime budgetPeriodStart, DateTime budgetPeriodEnd)
+        {
+            Dictionary<Guid, List<Transaction>> transactionsByBudget = new Dictionary<Guid, List<Transaction>>();
+            foreach (Budget budget in budgets.ToList())
+            {
+                IEnumerable<Transaction> fetchedTransactions = await budget.GetTransactions(budgetPeriodStart,
+                                                                        budgetPeriodEnd, _transactionRepository);
+                transactionsByBudget[budget.Id] = fetchedTransactions.ToList();
+                Dictionary<Guid, List<Transaction>> subBudgetsTransactionsByBudget = await LoadTransactions(budget.SubBudgets, budgetPeriodStart, budgetPeriodEnd);
+                AddRangeDictionary(transactionsByBudget, subBudgetsTransactionsByBudget);
+            }
+            return transactionsByBudget;
+        }
+
+        private void AddRangeDictionary<K,V>(Dictionary<K,V> destination, Dictionary<K,V> source)
+        {
+            foreach (K key in source.Keys)
+            {
+                if (destination.ContainsKey(key)) throw new InvalidOperationException("Found duplicate keys.");
+                destination[key] = source[key];
+            }
         }
     }
 }

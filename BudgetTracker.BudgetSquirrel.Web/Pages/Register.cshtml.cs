@@ -20,11 +20,11 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             _userRepository = userRepo;
         }
 
-        public async Task OnGet()
+        public void OnGet()
         {
         }
 
-        public async Task<IActionResult> OnPostRegister()
+        public IActionResult OnPostRegister()
         {
             // User user = new User()
             // {
