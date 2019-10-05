@@ -1,0 +1,39 @@
+@using BudgetTracker.BudgetSquirrel.Application
+@using BudgetTracker.BudgetSquirrel.Web.Pages
+@using BudgetTracker.BudgetSquirrel.Web.ViewComponents
+@using BudgetTracker.Business.Budgeting
+
+@model BudgetViewModel
+
+<link type="text/css" rel="stylesheet" href="css/components/budget.css" />
+
+<div class="budget-item budget-item--root" data-status="@Html.Raw((int) Model.StatusSummary)">
+    <h2>
+        @Model.Budget.Name
+    </h2>
+    <div class="budget-item__summary">
+        <div class="budget-item__inline-detail">
+            <p class="budget-item__label">Start of period:</p>
+            <p>@string.Format("{0:C}", Model.StartBalance)</p>
+        </div>
+        <div class="budget-item__inline-detail">
+            <p class="budget-item__label">Earnings:</p>
+            <p>@string.Format("{0:C}", Model.AmountIn)</p>
+        </div>
+        <div class="budget-item__inline-detail">
+            <p class="budget-item__label">Expenses:</p>
+            <p>@string.Format("{0:C}", Model.AmountOut)</p>
+        </div>
+        <div class="budget-item__inline-detail">
+            <p class="budget-item__label">Current Balance:</p>
+            <p>@string.Format("{0:C}", Model.FundBalance)</p>
+        </div>
+    </div>
+</div>
+<div class="budget-container">
+    @foreach (Budget subBudget in @Model.Budget.SubBudgets)
+    {
+        @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
+            new { budget = Model.GetSubBudgetViewModel(subBudget.Id) });
+    }
+</div>

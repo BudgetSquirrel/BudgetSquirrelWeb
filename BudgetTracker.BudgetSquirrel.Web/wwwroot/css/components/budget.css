@@ -1,0 +1,22 @@
+.budget-container {
+    padding-left: 64px;
+}
+
+.budget-item {
+    padding: 12px;
+}
+
+.budget-item .budget-item__inline-detail {
+    display: inline-block;
+    margin-right: 32px;
+}
+
+.budget-item h2,
+.budget-item h3,
+.budget-item > div {
+    margin-bottom: 8px;
+}
+
+.budget-item__details__label {
+    font-style: italic;
+}

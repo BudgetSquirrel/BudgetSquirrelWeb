@@ -11,6 +11,30 @@ namespace BudgetTracker.BudgetSquirrel.Application
         public Budget Budget { get; set; }
         public Dictionary<Guid, List<Transaction>> TransactionsByBudget { get; set; }
 
+        public List<Transaction> Transactions => TransactionsByBudget[Budget.Id];
+
+        public BudgetStatus StatusSummary
+        {
+            get
+            {
+                BudgetStatus status = BudgetStatus.Good;
+                double percentOfBudgetLeft = (double) (BudgetAmountLeft / Budget.SetAmount.Value);
+                if (percentOfBudgetLeft > AppConstants.BUDGET_STATUS_WARNING_THRESHOLD)
+                {
+                    status = BudgetStatus.Good;
+                }
+                else if (percentOfBudgetLeft > AppConstants.BUDGET_STATUS_BAD_THRESHOLD)
+                {
+                    status = BudgetStatus.Warning;
+                }
+                else
+                {
+                    status = BudgetStatus.Bad;
+                }
+                return status;
+            }
+        }
+
         /// <summary>
         /// <p>
         /// Total amount of money spent (including amounts gained) in the list
@@ -29,8 +53,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
             {
                 if (_transactionsTotal == null)
                 {
-                    _transactionsTotal = Budget.CalculateTransactionsTotalNetValue(
-                            TransactionsByBudget[Budget.Id]);
+                    _transactionsTotal = Budget.CalculateTransactionsTotalNetValue(Transactions);
                 }
                 return _transactionsTotal.Value;
             }
@@ -45,7 +68,50 @@ namespace BudgetTracker.BudgetSquirrel.Application
         /// budget.
         /// </p>
         /// </summary>
-        public decimal BudgetAmountLeft => (Budget.SetAmount.Value + TransactionsTotal);
+        public decimal BudgetAmountLeft => (FundBalance + TransactionsTotal);
+
+        /// <summary>
+        /// <p>
+        /// Amount of money spent represented by the fetched Transactions. This
+        /// does not factor in expenses (negative transactions), only earnings
+        /// (positive transactions).
+        /// </p>
+        /// </summary>
+        public decimal AmountIn
+        {
+            get
+            {
+                return Transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
+            }
+        }
+
+        /// <summary>
+        /// <p>
+        /// Amount of money spent represented by the fetched Transactions. This
+        /// does not factor in earnings (positive transactions), only expenses
+        /// (negative transactions). This value is returned as the absolute
+        /// value (always positive).
+        /// </p>
+        /// </summary>
+        public decimal AmountOut
+        {
+            get
+            {
+                return -1 * Transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
+            }
+        }
+
+        /// <summary>
+        /// <p>
+        /// Amount of that the budget started with before the specified transactions
+        /// were logged. A simple way to say this is that this is the balance
+        /// before the budget period represented in the TransactionsByBudget
+        /// started.
+        /// </p>
+        /// </summary>
+        public decimal StartBalance => (Budget.FundBalance - TransactionsTotal);
+
+        public decimal FundBalance => Budget.FundBalance;
 
         public BudgetViewModel() {}
 

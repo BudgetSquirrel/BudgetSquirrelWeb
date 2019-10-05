@@ -19,6 +19,10 @@ namespace BudgetTracker.BudgetSquirrel.Web.ViewComponents
         public IViewComponentResult Invoke(BudgetViewModel budget)
         {
             Budget = budget;
+            if (Budget.Budget.IsRootBudget)
+            {
+                return View("RootBudget", Budget);
+            }
             return View(Budget);
         }
     }

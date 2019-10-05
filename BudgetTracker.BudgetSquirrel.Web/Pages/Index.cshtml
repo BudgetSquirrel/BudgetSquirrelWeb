@@ -8,20 +8,6 @@
     ViewData["Title"] = "Home page";
 }
 
-@section Styles {
-    <style>
-        .budget-container > .budget-container {
-            margin-left: 50px;
-            border-left: 1px solid black;
-            border-top: 1px solid black;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
-}
-
 @if (Model.RootBudgetId == null)
 {
     <div>
@@ -39,7 +25,6 @@
 else
 {
     <div>
-        <h1>Root Budget</h1>
         @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
             new { budget = Model.RootBudget })
     </div>
