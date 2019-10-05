@@ -18,8 +18,6 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
     {
         public const string PageName = "Index";
 
-        private ITransactionRepository _transactionRepository;
-        private IUserRepository _userRepository;
         private BudgetService _budgetService;
 
         public Guid? RootBudgetId { get; set; }
@@ -30,12 +28,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
 
         public DateTime EndDate { get; set; }
 
-        public IndexModel(IUserRepository userRepo, ITransactionRepository transactionRepo,
-            ILoginService loginService, BudgetService budgetService)
+        public IndexModel(ILoginService loginService, BudgetService budgetService)
             : base(loginService)
         {
-            _transactionRepository = transactionRepo;
-            _userRepository = userRepo;
             _budgetService = budgetService;
         }
 
@@ -43,6 +38,7 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
         {
             if (RootBudgetId != null)
             {
+                (StartDate, EndDate) = GetDateWindow();
                 RootBudget = await _budgetService.GetBudgetTree(RootBudgetId.Value,
                                                                 StartDate, EndDate);
             }
@@ -51,6 +47,7 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
                 List<Budget> rootBudgets = await _budgetService.GetRootBudgets(CurrentUser.Id.Value);
                 if (rootBudgets.Count() == 1)
                 {
+                    (StartDate, EndDate) = GetDateWindow();
                     // User only has 1 root budget so just automatically choose that one.
                     await InitializeAsImpliedRootBudgetDetail(rootBudgets.First());
                 }
@@ -61,10 +58,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
                     AvailableRootBudgets = rootBudgets;
                 }
             }
-            (StartDate, EndDate) = GetDateWindow();
         }
 
-        public async Task<IActionResult> OnGet(Guid? budgetId)
+        public async Task<IActionResult> OnGetAsync(Guid? budgetId)
         {
             RootBudgetId = budgetId;
             IActionResult loginRedirect;

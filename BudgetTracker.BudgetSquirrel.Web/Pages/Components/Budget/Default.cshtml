@@ -1,28 +1,63 @@
 @using BudgetTracker.BudgetSquirrel.Application
+@using BudgetTracker.BudgetSquirrel.Web.Pages
 @using BudgetTracker.BudgetSquirrel.Web.ViewComponents
 @using BudgetTracker.Business.Budgeting
 
 @model BudgetViewModel
 
-<div>
-    <div>
-        <p>@Model.Budget.Name</p>
-        <p>
-            Amount In:
-            @Html.Raw("$" + Model.Budget.SetAmount)
-        </p>
-        <p>
-            Amount Out:
-            @Html.Raw("$" + (-1*Model.TransactionsTotal))
-        </p>
-        <p>
-            Left To Spend:
-            @Html.Raw("$" + Model.BudgetAmountLeft)
-        </p>
-        <p>
-            Balance:
-            @Html.Raw("$" + Model.Budget.FundBalance)
-        </p>
+<div class="budget-container">
+    <div class="budget-item">
+        <div class="details">
+            <p>@Model.Budget.Name</p>
+            <p>
+                Budget:
+                @Html.Raw("$" + Model.Budget.SetAmount)
+            </p>
+            <p>
+                Amount Out:
+                @Html.Raw("$" + (-1*Model.TransactionsTotal))
+            </p>
+            <p>
+                Left To Spend:
+                @Html.Raw("$" + Model.BudgetAmountLeft)
+            </p>
+            <p>
+                Balance:
+                @Html.Raw("$" + Model.Budget.FundBalance)
+            </p>
+        </div>
+        <div class="transaction-form">
+            <form method="post" asp-page="/@LogTransactionModel.PageName">
+                <p>
+                    <label for="VendorName">Vendor:</label>
+                    <input type="text" name="VendorName" placeholder="(Store Name)" />
+                </p>
+                <p>
+                    <label for="Amount">Amount:</label>
+                    <input type="number" step="0.01" name="Amount" />
+                </p>
+                <p>
+                    <label for="DateOfTransaction">Date of Transaction:</label>
+                    <input type="date" name="DateOfTransaction" placeholder="02/27/2019" />
+                </p>
+                <p>
+                    <label for="CheckNumber">Check Number:</label>
+                    <input type="text" name="CheckNumber" placeholder="1069" />
+                </p>
+                <p>
+                    <label for="Notes">Notes:</label>
+                    <input type="text" name="Notes" />
+                </p>
+                <p>
+                    <label for="Notes">Description:</label>
+                    <textarea name="Description"></textarea>
+                </p>
+                <div class="hidden">
+                    <input name="BudgetId" value="@Model.Budget.Id" />
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
     </div>
     @foreach (Budget subBudget in @Model.Budget.SubBudgets)
     {
