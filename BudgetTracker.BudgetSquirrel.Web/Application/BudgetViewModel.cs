@@ -18,7 +18,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
             get
             {
                 BudgetStatus status = BudgetStatus.Good;
-                double percentOfBudgetLeft = (double) (BudgetAmountLeft / Budget.SetAmount.Value);
+                double percentOfBudgetLeft = (double) ((double)FundBalance / (double)Budget.SetAmount.Value);
                 if (percentOfBudgetLeft > AppConstants.BUDGET_STATUS_WARNING_THRESHOLD)
                 {
                     status = BudgetStatus.Good;
@@ -59,16 +59,6 @@ namespace BudgetTracker.BudgetSquirrel.Application
             }
         }
         private decimal? _transactionsTotal;
-
-        /// <summary>
-        /// <p>
-        /// Amount of money left out of this budgets SetAmount. This is the amount
-        /// that the user has left to spend in this budget for the budget period
-        /// represented by the Transactions in TransactionsByBudget for this
-        /// budget.
-        /// </p>
-        /// </summary>
-        public decimal BudgetAmountLeft => (FundBalance + TransactionsTotal);
 
         /// <summary>
         /// <p>

@@ -20,3 +20,20 @@
 .budget-item__details__label {
     font-style: italic;
 }
+
+/* Budget status related styles */
+.budget-item[data-status="0"] .budget-item__status-color {
+    color: var(--bad);
+}
+
+.budget-item[data-status="0"] .budget-item__status-fill {
+    fill: var(--bad);
+}
+
+.budget-item[data-status="1"] .budget-item__status-color {
+    color: var(--warning);
+}
+
+.budget-item[data-status="1"] .budget-item__status-fill {
+    fill: var(--warning);
+}
