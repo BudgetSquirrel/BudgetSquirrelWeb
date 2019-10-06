@@ -1,4 +1,22 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+(function($) {
+    function toggleSubBudgets(budgetId) {
+        let budgetItem = $(".budget-item[data-budget-id=" + budgetId + "]");
+        let subBudgetContainer = $(".budget-container[data-budget-id=" + budgetId + "]");
+        let hiddenArrowSvg = budgetItem.children("svg.hidden");
+        let shownArrowSvg = $(hiddenArrowSvg).siblings("svg");
 
-// Write your Javascript code.
+        subBudgetContainer.toggleClass("hidden");
+        hiddenArrowSvg.toggleClass("hidden");
+        shownArrowSvg.toggleClass("hidden");
+    }
+
+    $(document).on("click", ".budget-item__transaction-form-toggle", function() {
+        $(this).siblings(".transaction-form").toggleClass("hidden");
+    });
+
+    $(document).on("click", ".budget-item__expand-toggle", function() {
+        let budgetId = $(this).parents(".budget-item").data("budgetId");
+
+        toggleSubBudgets(budgetId);
+    });
+})(jQuery);

@@ -5,53 +5,71 @@
 
 @model BudgetViewModel
 
-<div class="budget-item" data-status="@Html.Raw((int) Model.StatusSummary)">
-    <h3>
-        @Model.Budget.Name
-
-        @if (Model.StatusSummary == BudgetStatus.Bad)
-        {
-            <svg class="budget-item__status-fill" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M18 16v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-5 0h-2v-2h2v2zm0-4h-2V8h2v4zm-1 10c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2z"/>
+<div class="budget-item"
+        data-status="@Html.Raw((int) Model.StatusSummary)"
+        data-budget-id="@Model.Budget.Id">
+    <div class="budget-item__content">
+        <div class="budget-item__expand-toggle" role="button">
+            <svg class="budget-item__arrow-collapse hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                 <path fill="none" d="M0 0h24v24H0V0z"/>
             </svg>
-        }
-        else if (Model.StatusSummary == BudgetStatus.Warning)
-        {
-            <svg class="budget-item__status-fill" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path d="M0 0h24v24H0z" fill="none"/>
-                <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+            <svg class="budget-item__arrow-expand" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                <path fill="none" d="M0 0h24v24H0V0z"/>
             </svg>
-        }
-    </h3>
-
-    <div class="budget-item__summary">
-        <div class="budget-item__inline-detail">
-            @string.Format("{0:C}", Model.Budget.SetAmount)
-            Budgeted
         </div>
-        <div class="budget-item__inline-detail budget-item__status-color">
-            @string.Format("{0:C}", Model.FundBalance)
-            Available to Spend
+        <div class="budget-item__main">
+            <div class="budget-item__header">
+                <div class="budget-item__header__inline-detail">
+                    @if (Model.StatusSummary == BudgetStatus.Bad)
+                    {
+                        <svg class="budget-item__status-fill" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M18 16v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-5 0h-2v-2h2v2zm0-4h-2V8h2v4zm-1 10c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2z"/>
+                            <path fill="none" d="M0 0h24v24H0V0z"/>
+                        </svg>
+                    }
+                    else if (Model.StatusSummary == BudgetStatus.Warning)
+                    {
+                        <svg class="budget-item__status-fill" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    }
+
+                    <h3>
+                        @Model.Budget.Name
+                    </h3>
+                </div>
+
+                <span class="budget-item__header__inline-detail">
+                    @string.Format("{0:C}", Model.FundBalance)
+                    Available to Spend
+                </span>
+            </div>
+
+            <div class="budget-item__details">
+                <div class="budget-item__inline-detail">
+                    <p class="budget-item__label">Start of Period:</p>
+                    <p>@string.Format("{0:C}", Model.StartBalance)</p>
+                </div>
+                <div class="budget-item__inline-detail">
+                    <p class="budget-item__label">Amount Budgeted:</p>
+                    <p>@string.Format("{0:C}", Model.Budget.SetAmount)</p>
+                </div>
+                <div class="budget-item__inline-detail">
+                    <p class="budget-item__label">Earnings:</p>
+                    <p>@string.Format("{0:C}", Model.AmountIn)</p>
+                </div>
+                <div class="budget-item__inline-detail">
+                    <p class="budget-item__label">Expenses:</p>
+                    <p>@string.Format("{0:C}", Model.AmountOut)</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="budget-item__details">
-        <div class="budget-item__inline-detail">
-            <p class="budget-item__label">Start of Period:</p>
-            <p>@string.Format("{0:C}", Model.StartBalance)</p>
-        </div>
-        <div class="budget-item__inline-detail">
-            <p class="budget-item__label">Earnings:</p>
-            <p>@string.Format("{0:C}", Model.AmountIn)</p>
-        </div>
-        <div class="budget-item__inline-detail">
-            <p class="budget-item__label">Expenses:</p>
-            <p>@string.Format("{0:C}", Model.AmountOut)</p>
-        </div>
-    </div>
-
-    <div class="transaction-form">
+    <div class="transaction-form hidden">
         <form method="post" asp-page="/@LogTransactionModel.PageName">
             <p>
                 <label for="VendorName">Vendor:</label>
@@ -85,7 +103,7 @@
     </div>
 </div>
 
-<div class="budget-container">
+<div class="budget-container hidden" data-budget-id="@Model.Budget.Id">
     @foreach (Budget subBudget in @Model.Budget.SubBudgets)
     {
         @await Component.InvokeAsync(BudgetViewComponent.ComponentName,

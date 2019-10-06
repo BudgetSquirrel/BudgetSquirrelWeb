@@ -3,7 +3,59 @@
 }
 
 .budget-item {
+    border: 1px solid #AAA;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.budget-item__content {
+    display: flex;
+    width: fit-content;
+}
+
+.budget-item__details__label {
+    font-style: italic;
+}
+
+.budget-item__main {
+    display: inline-block;
     padding: 12px;
+}
+
+.budget-item__expand-toggle {
+    display: inline-flex;
+    padding-left: 12px;
+    padding-right: 12px;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+.budget-item__expand-toggle:hover {
+    cursor: pointer;
+    background: #DDD;
+}
+
+/* details/inside the budget item */
+
+.budget-item__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.budget-item__details {
+    margin-top: 8px;
+}
+
+.budget-item__header__inline-detail {
+    display: flex;
+    align-items: center;
+}
+
+.budget-item__header__inline-detail > svg {
+    margin-right: 8px;
 }
 
 .budget-item .budget-item__inline-detail {
@@ -11,14 +63,8 @@
     margin-right: 32px;
 }
 
-.budget-item h2,
-.budget-item h3,
-.budget-item > div {
-    margin-bottom: 8px;
-}
-
-.budget-item__details__label {
-    font-style: italic;
+.budget-item .budget-item__inline-detail:last-of-type {
+    margin-right: 0;
 }
 
 /* Budget status related styles */
