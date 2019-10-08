@@ -1,7 +1,13 @@
+/* For a good color pallet, see https://clrs.cc/ */
+
 * {
     --good: #2ECC40;
     --warning: #FFDC00;
     --bad: #FF4136;
+
+    --gray: #AAAAAA;
+    --gray-pale: #DDD;
+    --gray-shaded: #999;
 
     --tan-pale: #fff2cc;
 }

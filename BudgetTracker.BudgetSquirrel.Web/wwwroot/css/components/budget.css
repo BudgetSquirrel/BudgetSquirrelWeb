@@ -19,7 +19,6 @@
 
 .budget-item__main {
     display: inline-block;
-    padding: 12px;
 }
 
 .budget-item__expand-toggle {
@@ -35,6 +34,21 @@
 .budget-item__expand-toggle:hover {
     cursor: pointer;
     background: #DDD;
+    position: relative;
+    bottom: 1px;
+    left: 1px;
+    box-shadow: -1px 1px 5px;
+}
+
+/* Budget item controls */
+.budget-item__controls {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.budget-item__controls > .btn {
+    border-bottom: none;
 }
 
 /* details/inside the budget item */
@@ -43,10 +57,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 12px 12px 0 12px;
 }
 
 .budget-item__details {
-    margin-top: 8px;
+    padding: 8px 12px 0 12px;
 }
 
 .budget-item__header__inline-detail {

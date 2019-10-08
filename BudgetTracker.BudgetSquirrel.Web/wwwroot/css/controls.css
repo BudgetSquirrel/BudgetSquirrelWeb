@@ -1,0 +1,22 @@
+.btn {
+    padding: 8px;
+    background-color: var(--gray-pale);
+    border: 1px solid var(--gray-shaded);
+    border-radius: 3px;
+}
+
+.btn:hover {
+    cursor: pointer;
+    background-color: var(--gray);
+}
+
+.btn--icon {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn--square {
+    border-radius: 0;
+}

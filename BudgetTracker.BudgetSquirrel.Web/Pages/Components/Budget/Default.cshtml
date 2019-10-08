@@ -66,6 +66,18 @@
                     <p>@string.Format("{0:C}", Model.AmountOut)</p>
                 </div>
             </div>
+
+            <div class="budget-item__controls">
+                <div role="button" class="btn btn--icon btn--square inline-flex"
+                        data-toggle=".budget-item[data-budget-id='@Model.Budget.Id'] .transaction-form"
+                        data-toggle-group="transaction-form:@Model.Budget.Id"
+                        data-toggle-on>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -98,12 +110,19 @@
             <div class="hidden">
                 <input name="BudgetId" value="@Model.Budget.Id" />
             </div>
-            <button type="submit">Save</button>
+            <button type="submit" class="btn">Save</button>
+            <button role="button" type="button" class="btn hidden"
+                    data-toggle=".budget-item[data-budget-id='@Model.Budget.Id'] .transaction-form"
+                    data-toggle-group="transaction-form:@Model.Budget.Id"
+                    data-toggle-off>
+                Close
+            </button>
         </form>
     </div>
 </div>
 
-<div class="budget-container hidden" data-budget-id="@Model.Budget.Id">
+<div class="budget-container hidden"
+    data-budget-id="@Model.Budget.Id">
     @foreach (Budget subBudget in @Model.Budget.SubBudgets)
     {
         @await Component.InvokeAsync(BudgetViewComponent.ComponentName,

@@ -1,4 +1,3 @@
-/* For a good color pallet, see https://clrs.cc/ */
 
 * {
     margin: 0;
@@ -14,5 +13,5 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
