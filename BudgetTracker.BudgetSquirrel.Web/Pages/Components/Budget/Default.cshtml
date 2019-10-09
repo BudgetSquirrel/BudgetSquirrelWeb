@@ -20,7 +20,7 @@
             </svg>
         </div>
         <div class="budget-item__main">
-            <div class="budget-item__header">
+            <div class="budget-item__header" data-toggle=".budget-item[data-budget-id='@Model.Budget.Id'] .budget-item__details">
                 <div class="budget-item__header__inline-detail">
                     @if (Model.StatusSummary == BudgetStatus.Bad)
                     {
@@ -48,7 +48,7 @@
                 </span>
             </div>
 
-            <div class="budget-item__details">
+            <div class="budget-item__details hidden">
                 <div class="budget-item__inline-detail">
                     <p class="budget-item__label">Start of Period:</p>
                     <p>@string.Format("{0:C}", Model.StartBalance)</p>
@@ -70,12 +70,14 @@
             <div class="budget-item__controls">
                 <div role="button" class="btn btn--icon btn--square inline-flex"
                         data-toggle=".budget-item[data-budget-id='@Model.Budget.Id'] .transaction-form"
-                        data-toggle-group="transaction-form:@Model.Budget.Id"
-                        data-toggle-on>
+                        data-toggle-group="transaction-form:@Model.Budget.Id">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path d="M0 0h24v24H0z" fill="none"/>
                         <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                     </svg>
+                    <span class="btn__tool-tip">
+                        Add Transaction
+                    </span>
                 </div>
             </div>
         </div>
@@ -85,15 +87,15 @@
         <form method="post" asp-page="/@LogTransactionModel.PageName">
             <p>
                 <label for="VendorName">Vendor:</label>
-                <input type="text" name="VendorName" placeholder="(Store Name)" />
+                <input type="text" name="VendorName" placeholder="(Store Name)" required />
             </p>
             <p>
                 <label for="Amount">Amount:</label>
-                <input type="number" step="0.01" name="Amount" />
+                <input type="number" step="0.01" name="Amount" required />
             </p>
             <p>
                 <label for="DateOfTransaction">Date of Transaction:</label>
-                <input type="date" name="DateOfTransaction" placeholder="02/27/2019" />
+                <input type="date" name="DateOfTransaction" placeholder="02/27/2019" required />
             </p>
             <p>
                 <label for="CheckNumber">Check Number:</label>

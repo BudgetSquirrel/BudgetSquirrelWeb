@@ -20,3 +20,13 @@
 .btn--square {
     border-radius: 0;
 }
+
+.btn .btn__tool-tip {
+    display: none;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.btn:hover .btn__tool-tip {
+    display: inline-block;
+}
