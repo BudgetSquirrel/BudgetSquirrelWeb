@@ -60,6 +60,12 @@ namespace BudgetTracker.BudgetSquirrel.Application
             return transactionsByBudget;
         }
 
+        public async Task<Budget> CreateSubBudget(SubBudgetCreationViewModel input, User owner)
+        {
+            Budget created = await BudgetCreation.CreateBudgetForUser(input.ToDomain(), owner, _budgetRepository);
+            return created;
+        }
+
         private void AddRangeDictionary<K,V>(Dictionary<K,V> destination, Dictionary<K,V> source)
         {
             foreach (K key in source.Keys)

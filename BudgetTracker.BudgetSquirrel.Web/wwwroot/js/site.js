@@ -20,6 +20,10 @@
         toggleSubBudgets(budgetId);
     });
 
+    $(document).on("click", ".budget-item__btn-delete", function() {
+        $(this).find("form").submit();
+    });
+
     $(document).on("click", "*[data-toggle]", function() {
         /* Toggle the div that this button controls.
          *

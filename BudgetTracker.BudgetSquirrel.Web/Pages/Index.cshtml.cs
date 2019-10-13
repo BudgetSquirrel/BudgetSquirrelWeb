@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace BudgetTracker.BudgetSquirrel.Web.Pages
 {
@@ -69,6 +70,17 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             await Initialize();
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostNewSubBudget(SubBudgetCreationViewModel input)
+        {
+            IActionResult loginRedirect;
+            if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
+
+            Console.WriteLine(JsonConvert.SerializeObject(input));
+            Budget created = await _budgetService.CreateSubBudget(input, CurrentUser);
+
+            return RedirectToPage(IndexModel.PageName);
         }
 
         protected virtual (DateTime, DateTime) GetDateWindow()

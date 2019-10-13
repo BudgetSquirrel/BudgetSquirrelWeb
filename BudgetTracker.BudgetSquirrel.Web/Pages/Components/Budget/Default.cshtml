@@ -86,6 +86,22 @@
                         Add Sub-Budget
                     </span>
                 </div>
+                @* Not implemented on the server side.
+                <div role="button" class="budget-item__btn-delete btn btn--icon btn--icon--danger btn--square inline-flex">
+                    <div class="hidden">
+                        <form method="post" asp-page="/@DeleteBudgetModel.PageName">
+                            <input name="BudgetId" value="@Model.Budget.Id" />
+                        </form>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                    </svg>
+                    <span class="btn__tool-tip">
+                        Delete
+                    </span>
+                </div>
+                 *@
             </div>
         </div>
     </div>
@@ -132,6 +148,8 @@
 
 <div class="budget-container hidden"
     data-budget-id="@Model.Budget.Id">
+    @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
+            new { isCreationForm = true, parentBudget = Model.Budget })
     @foreach (Budget subBudget in @Model.Budget.SubBudgets)
     {
         @await Component.InvokeAsync(BudgetViewComponent.ComponentName,

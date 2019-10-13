@@ -31,6 +31,8 @@
     </div>
 </div>
 <div class="budget-container">
+    @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
+            new { isCreationForm = true, parentBudget = Model.Budget })
     @foreach (Budget subBudget in @Model.Budget.SubBudgets)
     {
         @await Component.InvokeAsync(BudgetViewComponent.ComponentName,

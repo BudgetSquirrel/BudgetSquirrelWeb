@@ -57,7 +57,8 @@
 
 /* details/inside the budget item */
 
-.budget-item__header {
+.budget-item__header,
+.budget-item__form {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -65,7 +66,15 @@
     border-top-right-radius: 7px;
 }
 
-.budget-item__header:hover {
+.budget-item--create-form .budget-item__form {
+    border-radius: 7px;
+}
+
+/* The not part is to exclude budget creation forms.
+ * When creating the budget, the header has no
+ * on-click action so no special display on hover.
+ */
+.budget-item:not(.budget-item--create-form) .budget-item__header:hover {
     cursor: pointer;
     background: var(--gray-pale);
     position: relative;
@@ -98,11 +107,11 @@
 
 /* Budget status related styles */
 .budget-item[data-status="0"] .budget-item__status-color {
-    color: var(--bad);
+    color: var(--danger);
 }
 
 .budget-item[data-status="0"] .budget-item__status-fill {
-    fill: var(--bad);
+    fill: var(--danger);
 }
 
 .budget-item[data-status="1"] .budget-item__status-color {
