@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace BudgetTracker.BudgetSquirrel.Web.Pages
 {
@@ -47,9 +48,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
                 List<Budget> rootBudgets = await _budgetService.GetRootBudgets(CurrentUser.Id.Value);
                 if (rootBudgets.Count() == 1)
                 {
-                    (StartDate, EndDate) = GetDateWindow();
-                    // User only has 1 root budget so just automatically choose that one.
-                    await InitializeAsImpliedRootBudgetDetail(rootBudgets.First());
+                    RootBudgetId = rootBudgets.First().Id;
+                    await Initialize();
+                    return;
                 }
                 else
                 {
@@ -71,6 +72,36 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             return Page();
         }
 
+        public async Task<IActionResult> OnPostNewSubBudget(SubBudgetCreationViewModel input)
+        {
+            IActionResult loginRedirect;
+            if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
+
+            Budget created = await _budgetService.CreateSubBudget(input, CurrentUser);
+
+            return RedirectToPage(IndexModel.PageName);
+        }
+
+        public async Task<IActionResult> OnPostEditSubBudget(EditBudgetViewModel input)
+        {
+            IActionResult loginRedirect;
+            if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
+
+            Budget modified = await _budgetService.EditBudget(input, CurrentUser);
+
+            return RedirectToPage(IndexModel.PageName);
+        }
+
+        public async Task<IActionResult> OnPostEditRootBudget(EditRootBudgetViewModel input)
+        {
+            IActionResult loginRedirect;
+            if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
+
+            Budget modified = await _budgetService.EditBudget(input, CurrentUser);
+
+            return RedirectToPage(IndexModel.PageName);
+        }
+
         protected virtual (DateTime, DateTime) GetDateWindow()
         {
             DateTime today = DateTime.Now;
@@ -81,13 +112,6 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
                        DateTime.DaysInMonth(today.Year,
                                             today.Month));
             return (start, end);
-        }
-
-        protected virtual async Task InitializeAsImpliedRootBudgetDetail(Budget chosenRootBudget)
-        {
-            RootBudgetId = chosenRootBudget.Id;
-            RootBudget = await _budgetService.GetBudgetTree(chosenRootBudget,
-                                                            StartDate, EndDate);
         }
     }
 }

@@ -1,3 +1,4 @@
+/* Button Styles */
 .btn {
     padding: 8px;
     background-color: var(--gray-pale);
@@ -17,6 +18,10 @@
     align-items: center;
 }
 
+.btn--icon--danger svg {
+    fill: var(--danger);
+}
+
 .btn--square {
     border-radius: 0;
 }
@@ -29,4 +34,17 @@
 
 .btn:hover .btn__tool-tip {
     display: inline-block;
+}
+
+/* Input Styles */
+input {
+    padding: 4px;
+}
+
+input[type="number"] {
+    width: 6em;
+}
+
+.input-symbol {
+    padding: 4px 4px 4px 4px;
 }

@@ -20,6 +20,40 @@
         toggleSubBudgets(budgetId);
     });
 
+    $(document).on("click", ".budget-item__btn-delete", function() {
+        $(this).find("form").submit();
+    });
+
+    $(document).on("click", ".budget-item__btn-edit-start", function() {
+        let budgetId = $(this).parents(".budget-item").data("budgetId");
+        let budgetItem = $(".budget-item[data-budget-id=" + budgetId + "]");
+
+        let editForm = $(budgetItem).find(".budget-item__edit-form");
+        let header = $(budgetItem).find(".budget-item__header");
+        let details = $(budgetItem).find(".budget-item__details");
+
+        editForm.removeClass("hidden");
+        header.addClass("hidden");
+        details.addClass("hidden");
+    });
+
+    $(document).on("click", ".budget-item__btn-edit-cancel", function() {
+        let budgetId = $(this).parents(".budget-item").data("budgetId");
+        let budgetItem = $(".budget-item[data-budget-id=" + budgetId + "]");
+        let isRootBudget = budgetItem.hasClass("budget-item--root");
+
+        let editForm = $(budgetItem).find(".budget-item__edit-form");
+        let header = $(budgetItem).find(".budget-item__header");
+
+        editForm.addClass("hidden");
+        header.removeClass("hidden");
+        if (isRootBudget)
+        {
+            let details = $(budgetItem).find(".budget-item__details");
+            details.removeClass("hidden");
+        }
+    });
+
     $(document).on("click", "*[data-toggle]", function() {
         /* Toggle the div that this button controls.
          *

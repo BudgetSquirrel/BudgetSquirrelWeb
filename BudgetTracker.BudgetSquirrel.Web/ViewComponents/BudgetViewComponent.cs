@@ -14,16 +14,29 @@ namespace BudgetTracker.BudgetSquirrel.Web.ViewComponents
     {
         public const string ComponentName = "Budget";
 
-        public BudgetViewModel Budget { get; set; }
-
-        public IViewComponentResult Invoke(BudgetViewModel budget)
+        public IViewComponentResult Invoke(BudgetViewModel budget=null,
+                                            Budget parentBudget=null,
+                                            bool isCreationForm=false)
         {
-            Budget = budget;
-            if (Budget.Budget.IsRootBudget)
+            if (isCreationForm)
+                return InvokeAsSubBudgetCreationForm(parentBudget);
+            else
+                return InvokeAsBudgetDisplayForm(budget);
+        }
+
+        private IViewComponentResult InvokeAsBudgetDisplayForm(BudgetViewModel budget)
+        {
+            if (budget.Budget.IsRootBudget)
             {
-                return View("RootBudget", Budget);
+                return View("RootBudget", budget);
             }
-            return View(Budget);
+            return View(budget);
+        }
+
+        private IViewComponentResult InvokeAsSubBudgetCreationForm(Budget parentBudget)
+        {
+            SubBudgetCreationViewModel form = new SubBudgetCreationViewModel(parentBudget.Id);
+            return View("SubBudgetCreateForm", form);
         }
     }
 }
