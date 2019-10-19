@@ -6,6 +6,7 @@
 @model SubBudgetCreationViewModel
 
 <form class="budget-item budget-item--create-form"
+        data-budget-id="@Model.ParentBudgetId"
         asp-page-handler="NewSubBudget"
         method="post">
     <div class="hidden">

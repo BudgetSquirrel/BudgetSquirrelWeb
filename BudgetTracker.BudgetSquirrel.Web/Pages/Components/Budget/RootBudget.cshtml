@@ -7,10 +7,36 @@
 
 <link type="text/css" rel="stylesheet" href="css/components/budget.css" />
 
-<div class="budget-item budget-item--root" data-status="@Html.Raw((int) Model.StatusSummary)">
-    <h2>
-        @Model.Budget.Name
-    </h2>
+<div class="budget-item budget-item--root"
+    data-status="@Html.Raw((int) Model.StatusSummary)"
+    data-budget-id="@Model.Budget.Id">
+    <div class="budget-item__header">
+        <div class="budget-item__header__inline-detail">
+            @if (Model.StatusSummary == BudgetStatus.Bad)
+            {
+                <svg class="budget-item__status-fill" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M18 16v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-5 0h-2v-2h2v2zm0-4h-2V8h2v4zm-1 10c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2z"/>
+                    <path fill="none" d="M0 0h24v24H0V0z"/>
+                </svg>
+            }
+            else if (Model.StatusSummary == BudgetStatus.Warning)
+            {
+                <svg class="budget-item__status-fill" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                </svg>
+            }
+
+            <h2>
+                @Model.Budget.Name
+            </h2>
+        </div>
+
+        <span class="budget-item__header__inline-detail">
+            @string.Format("{0:C}", Model.FundBalance)
+            Available to Spend
+        </span>
+    </div>
     <div class="budget-item__details">
         <div class="budget-item__inline-detail">
             <p class="budget-item__label">Start of period:</p>
@@ -29,7 +55,108 @@
             <p>@string.Format("{0:C}", Model.FundBalance)</p>
         </div>
     </div>
+
+    <form class="budget-item__edit-form hidden" asp-page-handler="EditRootBudget">
+        <div class="budget-item__edit-fields">
+            <div class="budget-item__edit-fields__inline">
+                <label for="Name">Name of Budget</label>
+                <input type="text" name="Name" placeholder="Name of Budget" value="@Model.EditForm.Name" required />
+            </div>
+
+            <div class="budget-item__edit-fields__inline">
+                <label for="SetAmount">Amount as Dollars</label>
+                <span class="input-symbol">
+                    $
+                    <input type="number" name="SetAmount" step="0.01" placeholder="$35.50" value="@Model.EditForm.SetAmount">
+                </span>
+            </div>
+        </div>
+        <div class="budget-item__edit-fields">
+            <div class="">
+                <label for="Name">Duration Type</label>
+                <select name="DurationType" value="" required>
+                    @if (((EditRootBudgetViewModel)Model.EditForm).DurationType == EditRootBudgetViewModel.DURATION_TYPE_BOOKENDED)
+                    {
+                        <option selected value="1">Start & End Dates</option>
+                        <option value="2">Length of Days</option>
+                    }
+                    else
+                    {
+                        <option value="1">Start & End Dates</option>
+                        <option selected value="2">Length of Days</option>
+                    }
+                <select>
+            </div>
+            <div class="">
+                <label for="Name">Budget Period Length</label>
+                <input type="number" name="NumberDays" placeholder="30" value="@(((EditRootBudgetViewModel)Model.EditForm).NumberDays)" required />
+            </div>
+            <div class="">
+                <label for="Name">Budget Period Start Date</label>
+                <input type="number" name="StartDayOfMonth" placeholder="1" value="@(((EditRootBudgetViewModel)Model.EditForm).StartDayOfMonth)" required />
+            </div>
+            <div class="">
+                <label for="Name">Budget Period End Date</label>
+                <input type="number" name="EndDayOfMonth" placeholder="1" value="@(((EditRootBudgetViewModel)Model.EditForm).EndDayOfMonth)" required />
+            </div>
+            <div class="">
+                <label for="Name">Roll over start date on small months?</label>
+
+                <select class="" name="RolloverStartDateOnSmallMonths">
+                    @if (((EditRootBudgetViewModel)Model.EditForm).RolloverStartDateOnSmallMonths)
+                    {
+                        <option selected value="1">Yes</option>
+                        <option value="0">No</option>
+                    }
+                    else
+                    {
+                        <option value="1">Yes</option>
+                        <option selected value="0">No</option>
+                    }
+                </select>
+            </div>
+            <div class="">
+                <label for="Name">Roll over end date on small months?</label>
+
+                <select class="" name="RolloverEndDateOnSmallMonths">
+                    @if (((EditRootBudgetViewModel)Model.EditForm).RolloverEndDateOnSmallMonths)
+                    {
+                        <option selected value="1">Yes</option>
+                        <option value="0">No</option>
+                    }
+                    else
+                    {
+                        <option value="1">Yes</option>
+                        <option selected value="0">No</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="hidden">
+            <input name="Id" value="@Model.EditForm.Id" />
+        </div>
+        <div class="budget-item__edit-controls">
+            <button class="btn" type="submit" name="submit">Save</button>
+            <button role="button" type="button" class="btn budget-item__btn-edit-cancel">
+                Cancel
+            </button>
+        </div>
+    </form>
+
+    <div class="budget-item__controls">
+        <div role="button" class="btn btn--icon btn--square inline-flex budget-item__btn-edit-start">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+            <span class="btn__tool-tip">
+                Edit Budget
+            </span>
+        </div>
+    </div>
+
 </div>
+
 <div class="budget-container">
     @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
             new { isCreationForm = true, parentBudget = Model.Budget })

@@ -13,6 +13,8 @@ namespace BudgetTracker.BudgetSquirrel.Application
 
         public List<Transaction> Transactions => TransactionsByBudget[Budget.Id];
 
+        public EditBudgetViewModel EditForm { get; set; }
+
         public BudgetStatus StatusSummary
         {
             get
@@ -109,6 +111,8 @@ namespace BudgetTracker.BudgetSquirrel.Application
         {
             Budget = budget;
             TransactionsByBudget = transactionsByBudget;
+
+            EditForm = GetEditForm(budget);
         }
 
         public BudgetViewModel GetSubBudgetViewModel(Guid subBudgetId)
@@ -118,6 +122,18 @@ namespace BudgetTracker.BudgetSquirrel.Application
 
             return new BudgetViewModel(Budget.SubBudgets.Single(b => b.Id == subBudgetId),
                                         TransactionsByBudget);
+        }
+
+        private EditBudgetViewModel GetEditForm(Budget budget)
+        {
+            if (budget.IsRootBudget)
+            {
+                return new EditRootBudgetViewModel(budget);
+            }
+            else
+            {
+                return new EditBudgetViewModel(budget);
+            }
         }
     }
 }

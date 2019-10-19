@@ -74,7 +74,7 @@
  * When creating the budget, the header has no
  * on-click action so no special display on hover.
  */
-.budget-item:not(.budget-item--create-form) .budget-item__header:hover {
+.budget-item:not(.budget-item--create-form):not(.budget-item--root) .budget-item__header:hover {
     cursor: pointer;
     background: var(--gray-pale);
     position: relative;
@@ -120,4 +120,21 @@
 
 .budget-item[data-status="1"] .budget-item__status-fill {
     fill: var(--warning);
+}
+
+/* Edit form */
+.budget-item__edit-controls {
+    padding: 0 12px 12px 12px;
+}
+
+.budget-item__edit-fields {
+    padding: 12px;
+}
+
+.budget-item__edit-fields__inline {
+    display: inline-block;
+}
+
+.budget-item__edit-fields__inline > * {
+    display: block;
 }
