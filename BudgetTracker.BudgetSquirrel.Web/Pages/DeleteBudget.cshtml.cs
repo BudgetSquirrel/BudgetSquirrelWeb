@@ -33,8 +33,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             if ( (loginRedirect = await AuthenticateOrGoLogin()) != null ) return loginRedirect;
 
             Console.WriteLine(budgetId);
+            throw new NotImplementedException("Delete budget not implemented.");
 
-            return RedirectToPage(IndexModel.PageName);
+            // return RedirectToPage(IndexModel.PageName);
         }
     }
 }

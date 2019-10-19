@@ -66,6 +66,21 @@ namespace BudgetTracker.BudgetSquirrel.Application
             return created;
         }
 
+        public async Task<Budget> EditBudget(EditBudgetViewModel input, User owner)
+        {
+            Budget toEdit = await _budgetRepository.GetBudget(input.Id);
+            await toEdit.LoadParentBudget(_budgetRepository);
+
+            decimal originalSetAmount = toEdit.SetAmount.Value;
+            input.SetModifications(toEdit);
+            toEdit.SetAmount = toEdit.CalculateBudgetSetAmount();
+            decimal setAmountDifference = toEdit.SetAmount.Value - originalSetAmount;
+            toEdit.FundBalance += setAmountDifference; // TODO: Use a transaction instead to do this?
+
+            Budget modified = await _budgetRepository.UpdateBudget(toEdit);
+            return modified;
+        }
+
         private void AddRangeDictionary<K,V>(Dictionary<K,V> destination, Dictionary<K,V> source)
         {
             foreach (K key in source.Keys)

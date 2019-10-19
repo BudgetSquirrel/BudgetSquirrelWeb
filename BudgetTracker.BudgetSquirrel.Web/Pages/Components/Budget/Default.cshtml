@@ -67,6 +67,40 @@
                 </div>
             </div>
 
+            <form class="budget-item__edit-form hidden" asp-page-handler="EditSubBudget">
+                <div class="budget-item__edit-fields">
+                    <div class="budget-item__edit-fields__inline">
+                        <label for="Name">Name of Budget</label>
+                        <input type="text" name="Name" placeholder="Name of Budget" value="@Model.EditForm.Name" required />
+                    </div>
+
+                    <div class="budget-item__edit-fields__inline">
+                        <label for="SetAmount">Amount as Dollars</label>
+                        <span class="input-symbol">
+                            $
+                            <input type="number" name="SetAmount" step="0.01" placeholder="$35.50" value="@Model.EditForm.SetAmount">
+                        </span>
+                    </div>
+
+                    <div class="budget-item__edit-fields__inline">
+                        <label for="PercentAmount">Amount as Percent</label>
+                        <span class="input-symbol">
+                            %
+                            <input type="number" name="PercentAmount" placeholder="Amount as Percent" value="@Model.EditForm.PercentAmount">
+                        </span>
+                    </div>
+                </div>
+                <div class="hidden">
+                    <input name="Id" value="@Model.EditForm.Id" />
+                </div>
+                <div class="budget-item__edit-controls">
+                    <button class="btn" type="submit" name="submit">Save</button>
+                    <button role="button" type="button" class="btn budget-item__btn-edit-cancel">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
             <div class="budget-item__controls">
                 <div role="button" class="btn btn--icon btn--square inline-flex"
                         data-toggle=".budget-item[data-budget-id='@Model.Budget.Id'] .transaction-form"
@@ -77,7 +111,8 @@
                         Add Transaction
                     </span>
                 </div>
-                <div role="button" class="btn btn--icon btn--square inline-flex">
+                <div role="button" class="btn btn--icon btn--square inline-flex"
+                    data-toggle=".budget-item--create-form[data-budget-id='@Model.Budget.Id']">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path d="M0 0h24v24H0z" fill="none"/>
                         <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
@@ -86,6 +121,17 @@
                         Add Sub-Budget
                     </span>
                 </div>
+
+                <div role="button" class="btn btn--icon btn--square inline-flex budget-item__btn-edit-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                    </svg>
+                    <span class="btn__tool-tip">
+                        Edit Budget
+                    </span>
+                </div>
+
                 @* Not implemented on the server side.
                 <div role="button" class="budget-item__btn-delete btn btn--icon btn--icon--danger btn--square inline-flex">
                     <div class="hidden">
@@ -102,6 +148,7 @@
                     </span>
                 </div>
                  *@
+
             </div>
         </div>
     </div>
