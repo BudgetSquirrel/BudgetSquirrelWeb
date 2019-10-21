@@ -16,6 +16,8 @@ namespace BudgetTracker.BudgetSquirrel.Web.Auth
 
         Task<User> Login(string username, string password);
 
+        Task Login(User user);
+
         Task Logout();
     }
 }

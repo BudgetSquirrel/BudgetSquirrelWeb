@@ -1,5 +1,8 @@
 using BudgetTracker.Business.Auth;
+using BudgetTracker.Business.Budgeting;
 using BudgetTracker.Business.Ports.Repositories;
+using BudgetTracker.BudgetSquirrel.Application;
+using BudgetTracker.BudgetSquirrel.Web.Auth;
 
 using System;
 using System.Collections.Generic;
@@ -13,24 +16,36 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
 {
     public class RegisterModel : PageModel
     {
-        private IUserRepository _userRepository;
+        private UserService _userService;
+        private ILoginService _loginService;
 
-        public RegisterModel(IUserRepository userRepo)
+        [TempData]
+        public string ErrorMessage { get; set; }
+
+        public RegisterModel(UserService userService, ILoginService loginService)
         {
-            _userRepository = userRepo;
+            _userService = userService;
+            _loginService = loginService;
         }
 
         public void OnGet()
         {
         }
 
-        public IActionResult OnPostRegister()
+        public async Task<IActionResult> OnPostRegister(CreateUserViewModel input)
         {
-            // User user = new User()
-            // {
-            //     Username =
-            // };
-            return RedirectToPage("Index");
+            try
+            {
+                (User user, Budget rootBudget) = await _userService.RegisterUserAndRootBudget(input);
+                await _loginService.Logout();
+                await _loginService.Login(user);
+                return RedirectToPage(IndexModel.PageName);
+            }
+            catch (BudgetSquirrelException e)
+            {
+                ErrorMessage = e.Message;
+                return RedirectToPage();
+            }
         }
     }
 }
