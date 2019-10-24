@@ -50,6 +50,16 @@ namespace BudgetTracker.BudgetSquirrel.Web.Auth
             User user = await Authenticate(username, password);
             if (user == null) return null;
 
+            await Login(user);
+            return user;
+        }
+
+        /// <summary>
+        /// Logs the user in. This does not check password correctness as it
+        /// assumes that the user has already been authenticated.
+        /// </summary>
+        public async Task Login(User user)
+        {
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Email),
@@ -61,7 +71,6 @@ namespace BudgetTracker.BudgetSquirrel.Web.Auth
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
             await HttpContext.SignInAsync(principal);
-            return user;
         }
 
         public Task Logout()

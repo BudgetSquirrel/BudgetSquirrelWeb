@@ -45,6 +45,7 @@ namespace BudgetTracker.BudgetSquirrel.Web
 
             services.AddTransient<BudgetService>();
             services.AddTransient<TransactionService>();
+            services.AddTransient<UserService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();
