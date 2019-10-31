@@ -40,8 +40,7 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             if (RootBudgetId != null)
             {
                 (StartDate, EndDate) = GetDateWindow();
-                RootBudget = await _budgetService.GetBudgetTree(RootBudgetId.Value,
-                                                                StartDate, EndDate);
+                RootBudget = await _budgetService.GetBudgetTreeForCurrentPeriod(RootBudgetId.Value);
             }
             else
             {

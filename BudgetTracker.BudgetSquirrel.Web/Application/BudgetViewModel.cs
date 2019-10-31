@@ -20,7 +20,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
             get
             {
                 BudgetStatus status = BudgetStatus.Good;
-                double percentOfBudgetLeft = (double) ((double)FundBalance / (double)Budget.SetAmount.Value);
+                double percentOfBudgetLeft = (double) ((double)BalanceWithPlannedBudget / (double)Budget.SetAmount.Value);
                 if (percentOfBudgetLeft > AppConstants.BUDGET_STATUS_WARNING_THRESHOLD)
                 {
                     status = BudgetStatus.Good;
@@ -104,6 +104,15 @@ namespace BudgetTracker.BudgetSquirrel.Application
         public decimal StartBalance => (Budget.FundBalance - TransactionsTotal);
 
         public decimal FundBalance => Budget.FundBalance;
+
+        /// <summary>
+        /// <p>
+        /// Amount of that the budget left to spend if you factor in the amount
+        /// that is planned to be added as income. This is basically the current
+        /// balance added to the planned budget for the budget period.
+        /// </p>
+        /// </summary>
+        public decimal BalanceWithPlannedBudget => FundBalance + Budget.SetAmount.Value;
 
         public BudgetViewModel() {}
 

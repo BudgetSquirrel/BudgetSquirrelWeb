@@ -1,5 +1,6 @@
 using BudgetTracker.Business.Auth;
 using BudgetTracker.Business.Budgeting;
+using BudgetTracker.Business.BudgetPeriods;
 using BudgetTracker.Business.Ports.Repositories;
 using BudgetTracker.Business.Transactions;
 using System;
@@ -14,18 +15,27 @@ namespace BudgetTracker.BudgetSquirrel.Application
         private IBudgetRepository _budgetRepository;
         private ITransactionRepository _transactionRepository;
         private IUserRepository _userRepository;
+        private BudgetPeriodCalculator _budgetPeriodCalculator;
 
         public BudgetService(IBudgetRepository budgetRepo, IUserRepository userRepo,
-            ITransactionRepository transactionRepo)
+            ITransactionRepository transactionRepo,
+            BudgetPeriodCalculator budgetPeriodCalculator)
         {
             _budgetRepository = budgetRepo;
             _transactionRepository = transactionRepo;
             _userRepository = userRepo;
+            _budgetPeriodCalculator = budgetPeriodCalculator;
         }
 
         public Task<List<Budget>> GetRootBudgets(Guid userId)
         {
             return _budgetRepository.GetRootBudgets(userId);
+        }
+
+        public async Task<BudgetViewModel> GetBudgetTreeForCurrentPeriod(Guid rootBudgetId)
+        {
+            Budget rootBudget = await _budgetRepository.GetBudget(rootBudgetId);
+            return await GetBudgetTreeForCurrentPeriod(rootBudget);
         }
 
         public async Task<BudgetViewModel> GetBudgetTree(Guid rootBudgetId,
@@ -35,10 +45,17 @@ namespace BudgetTracker.BudgetSquirrel.Application
             return await GetBudgetTree(rootBudget, budgetPeriodStart, budgetPeriodEnd);
         }
 
+        public async Task<BudgetViewModel> GetBudgetTreeForCurrentPeriod(Budget rootBudget)
+        {
+            BudgetPeriod currentPeriod = await _budgetPeriodCalculator.GetOrCreateForDate(rootBudget, DateTime.Now);
+            return await GetBudgetTree(rootBudget, currentPeriod.StartDate, currentPeriod.EndDate);
+        }
+
         public async Task<BudgetViewModel> GetBudgetTree(Budget rootBudget,
             DateTime budgetPeriodStart, DateTime budgetPeriodEnd)
         {
             BudgetViewModel budgetVM = new BudgetViewModel(rootBudget, null);
+
             await _budgetRepository.LoadSubBudgets(rootBudget, true);
             budgetVM.TransactionsByBudget = await LoadTransactions(new List<Budget>() { rootBudget },
                                     budgetPeriodStart, budgetPeriodEnd);

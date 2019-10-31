@@ -1,6 +1,7 @@
 using BudgetTracker.BudgetSquirrel.Application;
 using BudgetTracker.BudgetSquirrel.Data;
 using BudgetTracker.BudgetSquirrel.Web.Auth;
+using BudgetTracker.Business.BudgetPeriods;
 using BudgetTracker.Business.Ports.Repositories;
 using BudgetTracker.Data.EntityFramework;
 using BudgetTracker.Data.EntityFramework.Repositories;
@@ -40,6 +41,7 @@ namespace BudgetTracker.BudgetSquirrel.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            ConfigureBudgetTrackerBusiness(services);
             ConfigureAdapters(services);
             ConfigureAuth(services);
 
@@ -69,8 +71,14 @@ namespace BudgetTracker.BudgetSquirrel.Web
             });
 
             services.AddTransient<IBudgetRepository, BudgetRepository>();
+            services.AddTransient<IBudgetPeriodRepository, BudgetPeriodRepository>();
             services.AddTransient<ITransactionRepository, TransactionRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+        }
+
+        public virtual void ConfigureBudgetTrackerBusiness(IServiceCollection services)
+        {
+            services.AddTransient<BudgetPeriodCalculator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

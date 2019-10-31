@@ -33,7 +33,12 @@
         </div>
 
         <span class="budget-item__header__inline-detail">
-            @string.Format("{0:C}", Model.FundBalance)
+            Planned Income:
+            @string.Format("{0:C}", Model.Budget.SetAmount.Value)
+        </span>
+
+        <span class="budget-item__header__inline-detail">
+            @string.Format("{0:C}", Model.BalanceWithPlannedBudget)
             Available to Spend
         </span>
     </div>
