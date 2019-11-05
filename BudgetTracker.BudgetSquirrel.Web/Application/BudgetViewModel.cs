@@ -49,18 +49,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
         /// they put into in this budget.
         /// </p>
         /// </summary>
-        public decimal TransactionsTotal
-        {
-            get
-            {
-                if (_transactionsTotal == null)
-                {
-                    _transactionsTotal = Budget.CalculateTransactionsTotalNetValue(Transactions);
-                }
-                return _transactionsTotal.Value;
-            }
-        }
-        private decimal? _transactionsTotal;
+        public decimal TransactionsTotal => Budget.CalculateTransactionsTotalNetValue(Transactions);
 
         /// <summary>
         /// <p>
@@ -69,13 +58,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
         /// (positive transactions).
         /// </p>
         /// </summary>
-        public decimal AmountIn
-        {
-            get
-            {
-                return Transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
-            }
-        }
+        public decimal AmountIn => Budget.GetAmountIn(Transactions);
 
         /// <summary>
         /// <p>
@@ -85,13 +68,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
         /// value (always positive).
         /// </p>
         /// </summary>
-        public decimal AmountOut
-        {
-            get
-            {
-                return -1 * Transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
-            }
-        }
+        public decimal AmountOut => Budget.GetAmountOut(Transactions);
 
         /// <summary>
         /// <p>
