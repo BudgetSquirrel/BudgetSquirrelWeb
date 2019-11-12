@@ -8,24 +8,31 @@
     ViewData["Title"] = "Home page";
 }
 
-@if (Model.RootBudgetId == null)
+@section Styles
 {
-    <div>
-        @foreach (Budget budget in Model.AvailableRootBudgets)
-        {
-            <form method="post" onclick="$(this).submit();">
-                <div class="hidden">
-                    <input name="BudgetId" value="@budget" />
-                </div>
-                <div>@budget.Name - @budget.Id</div>
-            </form>
-        }
-    </div>
+    <link rel="stylesheet" type="text/css" href="~/css/pages/index.css" />
 }
-else
-{
-    <div>
-        @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
-            new { budget = Model.RootBudget })
-    </div>
-}
+
+<div class="budget-index">
+    @if (Model.RootBudgetId == null)
+    {
+        <div>
+            @foreach (Budget budget in Model.AvailableRootBudgets)
+            {
+                <form method="post" onclick="$(this).submit();">
+                    <div class="hidden">
+                        <input name="BudgetId" value="@budget" />
+                    </div>
+                    <div>@budget.Name - @budget.Id</div>
+                </form>
+            }
+        </div>
+    }
+    else
+    {
+        <div>
+            @await Component.InvokeAsync(BudgetViewComponent.ComponentName,
+                new { budget = Model.RootBudget })
+        </div>
+    }
+</div>

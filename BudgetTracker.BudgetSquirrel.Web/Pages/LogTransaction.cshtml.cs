@@ -1,4 +1,3 @@
-using BudgetTracker.BudgetSquirrel.Application;
 using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.Auth;
 using BudgetTracker.Business.Budgeting;
@@ -12,6 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using BudgetTracker.BudgetSquirrel.Application.Budgeting;
+using BudgetTracker.BudgetSquirrel.Application.Transactions;
 
 namespace BudgetTracker.BudgetSquirrel.Web.Pages
 {

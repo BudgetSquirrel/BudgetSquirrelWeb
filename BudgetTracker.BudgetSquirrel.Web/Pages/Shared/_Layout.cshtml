@@ -7,36 +7,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] | BudgetSquirrel</title>
 
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/colors.css" />
-    <link rel="stylesheet" href="~/css/controls.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/colors.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/constants.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/controls.css" />
     @RenderSection("Styles", required: false)
 </head>
 <body>
 
     <header>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <div>
-                Hello
-                @Html.Raw(ViewData["UserFullName"] + "!")
+        <div class="header__left">
+            <div class="header__image-container--spacer">
+                <div class="header__image-container">
+                    <img src="~/images/scratchmoney.jpg"></img>
+                </div>
             </div>
-            <form class="" asp-page="Logout" method="post">
-                <button type="submit" name="logout">Logout</button>
-            </form>
-        }
-        else
-        {
-            @if (TempData["FailedLogin"] != null && (bool)TempData["FailedLogin"] == true)
+        </div>
+
+        <div class="header__right">
+            @if (User.Identity.IsAuthenticated)
             {
-                <div><p>Those credentials are incorrect.</p></div>
+                <div class="header__authentication">
+                    <div>
+                        Hello
+                        @Html.Raw(ViewData["UserFullName"] + "!")
+                    </div>
+                    <form class="" asp-page="Logout" method="post">
+                        <button class="btn" type="submit" name="logout">Logout</button>
+                    </form>
+                </div>
             }
-            <form asp-page="Login" method="post">
-                <input name="username" />
-                <input type="password" name="password" />
-                <button type="submit">Login</button>
-            </form>
-        }
+            else
+            {
+                <div class="header__authentication">
+                    @if (TempData["FailedLogin"] != null && (bool)TempData["FailedLogin"] == true)
+                    {
+                        <div><p class="alert alert--error">Those credentials are incorrect.</p></div>
+                    }
+                    <form asp-page="Login" method="post">
+                        <input name="username" placeholder="Username" />
+                        <input type="password" name="password" placeholder="Password" />
+                        <button class="btn" type="submit">Login</button>
+                    </form>
+                    <a class="btn" href="/@RegisterModel.PageName">Register</a>
+                </div>
+            }
+        </div>
     </header>
 
     <main role="main">

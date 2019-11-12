@@ -36,8 +36,6 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
         {
             string username = Request.Form["Username"];
             string password = Request.Form["Password"];
-            username = username != "" ? username : "user1";
-            password = password != "" ? password : "user1234";
 
             User loggedInUser = await _loginService.Login(username, password);
             if (loggedInUser == null)

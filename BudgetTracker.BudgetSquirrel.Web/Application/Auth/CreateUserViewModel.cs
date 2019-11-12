@@ -3,7 +3,7 @@ using BudgetTracker.Business.Budgeting;
 using BudgetTracker.Business.BudgetPeriods;
 using System;
 
-namespace BudgetTracker.BudgetSquirrel.Application
+namespace BudgetTracker.BudgetSquirrel.Application.Auth
 {
     public class CreateUserViewModel
     {

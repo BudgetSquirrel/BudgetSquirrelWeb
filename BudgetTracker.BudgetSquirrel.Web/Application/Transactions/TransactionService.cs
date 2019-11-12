@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BudgetTracker.BudgetSquirrel.Application
+namespace BudgetTracker.BudgetSquirrel.Application.Transactions
 {
     public class TransactionService
     {

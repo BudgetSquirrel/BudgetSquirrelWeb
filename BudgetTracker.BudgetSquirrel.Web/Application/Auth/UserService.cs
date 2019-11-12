@@ -5,18 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BudgetTracker.BudgetSquirrel.Application
+namespace BudgetTracker.BudgetSquirrel.Application.Auth
 {
     public class UserService
     {
+        private BudgetCreation _budgetCreator;
         private IUserRepository _userRepository;
-        public IBudgetRepository _budgetRepository;
 
-        public UserService(IUserRepository userRepository,
-            IBudgetRepository budgetRepository)
+        public UserService(BudgetCreation budgetCreator, IUserRepository userRepository)
         {
+            _budgetCreator = budgetCreator;
             _userRepository = userRepository;
-            _budgetRepository = budgetRepository;
         }
 
         public async Task<(User, Budget)> RegisterUserAndRootBudget(CreateUserViewModel setupInput)
@@ -27,7 +26,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
             bool userCreated = await _userRepository.Register(user);
             User createdUser = await _userRepository.GetByUsername(user.Username);
             Budget budgetToCreate = setupInput.GetRootBudget();
-            Budget rootBudget = await BudgetCreation.CreateBudgetForUser(budgetToCreate, createdUser, _budgetRepository);
+            Budget rootBudget = await _budgetCreator.CreateBudgetForUser(budgetToCreate, createdUser);
             return (createdUser, rootBudget);
         }
 

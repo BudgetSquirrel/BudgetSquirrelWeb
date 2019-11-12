@@ -1,4 +1,4 @@
-using BudgetTracker.BudgetSquirrel.Application;
+using BudgetTracker.BudgetSquirrel.Application.Budgeting;
 using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.Auth;
 using BudgetTracker.Business.Budgeting;

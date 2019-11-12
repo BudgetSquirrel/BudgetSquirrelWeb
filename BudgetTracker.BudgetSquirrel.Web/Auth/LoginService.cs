@@ -1,9 +1,11 @@
 using BudgetTracker.Business.Auth;
 using BudgetTracker.Business.Ports.Repositories;
-
+using GateKeeper.Configuration;
+using GateKeeper.Cryptogrophy;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +18,19 @@ namespace BudgetTracker.BudgetSquirrel.Web.Auth
     {
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly IUserRepository _userRepository;
-
+        private ICryptor _cryptor;
+        GateKeeperConfig _gateKeeperConfig;
+        
         protected HttpContext HttpContext { get { return _httpContextAccessor.HttpContext; } }
 
-        public LoginService(IHttpContextAccessor httpContextAccessor,
-            IUserRepository userRepo)
+        public LoginService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepo,
+            IConfiguration appConfig)
         {
+            _gateKeeperConfig = ConfigurationReader.FromAppConfiguration(appConfig);
+
             _httpContextAccessor = httpContextAccessor;
             _userRepository = userRepo;
+            _cryptor = new Rfc2898Encryptor();
         }
 
         public async Task<User> GetUser()
@@ -39,7 +46,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Auth
         public async Task<User> Authenticate(string username, string password)
         {
             User user = await _userRepository.GetByUsername(username);
-            // TODO: Check password
+            string encryptedPasswordGuess = _cryptor.Encrypt(password, _gateKeeperConfig.EncryptionKey, _gateKeeperConfig.Salt);
+            if (encryptedPasswordGuess != user.Password)
+                return null;
             return user;
         }
 

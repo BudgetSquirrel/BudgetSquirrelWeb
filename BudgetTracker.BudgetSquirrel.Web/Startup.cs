@@ -1,4 +1,6 @@
-using BudgetTracker.BudgetSquirrel.Application;
+using BudgetTracker.BudgetSquirrel.Application.Auth;
+using BudgetTracker.BudgetSquirrel.Application.Budgeting;
+using BudgetTracker.BudgetSquirrel.Application.Transactions;
 using BudgetTracker.BudgetSquirrel.Data;
 using BudgetTracker.BudgetSquirrel.Web.Auth;
 using BudgetTracker.Business.BudgetPeriods;
@@ -19,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using BudgetTracker.Business.Budgeting;
 
 namespace BudgetTracker.BudgetSquirrel.Web
 {
@@ -79,6 +82,7 @@ namespace BudgetTracker.BudgetSquirrel.Web
         public virtual void ConfigureBudgetTrackerBusiness(IServiceCollection services)
         {
             services.AddTransient<BudgetPeriodCalculator>();
+            services.AddTransient<BudgetCreation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

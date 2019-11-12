@@ -1,14 +1,9 @@
 using BudgetTracker.Business.Auth;
 using BudgetTracker.Business.Budgeting;
-using BudgetTracker.Business.Ports.Repositories;
 using BudgetTracker.BudgetSquirrel.Application;
+using BudgetTracker.BudgetSquirrel.Application.Auth;
 using BudgetTracker.BudgetSquirrel.Web.Auth;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,6 +11,8 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
 {
     public class RegisterModel : PageModel
     {
+        public static string PageName = "Register";
+        
         private UserService _userService;
         private ILoginService _loginService;
 
@@ -28,8 +25,9 @@ namespace BudgetTracker.BudgetSquirrel.Web.Pages
             _loginService = loginService;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            await _loginService.Logout();
         }
 
         public async Task<IActionResult> OnPostRegister(CreateUserViewModel input)

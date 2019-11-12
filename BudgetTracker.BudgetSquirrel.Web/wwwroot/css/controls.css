@@ -4,6 +4,12 @@
     background-color: var(--gray-pale);
     border: 1px solid var(--gray-shaded);
     border-radius: 3px;
+    display: inline-block;
+}
+
+a.btn {
+    text-decoration: none;
+    color: black;
 }
 
 .btn:hover {
@@ -36,7 +42,7 @@
     display: inline-block;
 }
 
-/* Input Styles */
+/* Text element Styles */
 input {
     padding: 4px;
 }
@@ -47,4 +53,21 @@ input[type="number"] {
 
 .input-symbol {
     padding: 4px 4px 4px 4px;
+}
+
+h1 {
+    font-size: 4em;
+}
+
+h2 {
+    font-size: 3em;
+}
+
+h3 {
+    font-size: 2em;
+}
+
+/* Alerts */
+.alert--error {
+    color: var(--danger);
 }

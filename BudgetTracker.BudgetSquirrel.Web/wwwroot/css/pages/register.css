@@ -1,0 +1,25 @@
+.register-form__row {
+    margin-top: var(--spacing-unit);
+}
+
+.register-form__row:first-of-type {
+    margin-top: 0;
+}
+
+.register-form__section {
+    margin-bottom: calc(2 * var(--spacing-unit));
+}
+
+.register-form__field > * {
+    display: block;
+}
+
+.register-form__field {
+    display: inline-block;
+}
+
+.register-form__controls {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+}

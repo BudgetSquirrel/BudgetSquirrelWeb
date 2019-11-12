@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BudgetTracker.BudgetSquirrel.Application
+namespace BudgetTracker.BudgetSquirrel.Application.Budgeting
 {
     public class BudgetViewModel
     {

@@ -1,7 +1,7 @@
 using BudgetTracker.Business.Budgeting;
 using System;
 
-namespace BudgetTracker.BudgetSquirrel.Application
+namespace BudgetTracker.BudgetSquirrel.Application.Budgeting
 {
     public class EditBudgetViewModel
     {

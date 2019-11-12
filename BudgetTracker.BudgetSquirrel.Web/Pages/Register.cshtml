@@ -4,7 +4,12 @@
     ViewData["Title"] = "Register";
 }
 
-<form class="register-form" asp-page-handler="register" method="post">
+@section Styles
+{
+    <link rel="stylesheet" type="text/css" href="~/css/pages/register.css" />
+}
+
+<form class="register-form page-form" asp-page-handler="register" method="post">
 
     <div class="register-form__messages">
         @if(Model.ErrorMessage != null)
@@ -14,74 +19,92 @@
     </div>
 
     <div class="register-form__section">
-        <div class="register-form__field">
-            <label for="FirstName">First Name</label>
-            <input type="text" name="FirstName" required/>
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="FirstName">First Name:</label>
+                <input type="text" name="FirstName" placeholder="(ex. Adam)" required/>
+            </div>
+            <div class="register-form__field">
+                <label for="LastName">Last Name:</label>
+                <input type="text" name="LastName" placeholder="(ex. Johnson)" required/>
+            </div>
         </div>
-        <div class="register-form__field">
-            <label for="LastName">Last Name</label>
-            <input type="text" name="LastName" required/>
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="Email">Email:</label>
+                <input type="text" name="Email" placeholder="(ex. adam.johnson@example.com)" required/>
+            </div>
+            <div class="register-form__field">
+                <label for="Username">Username:</label>
+                <input type="text" name="Username" placeholder="(ex. johnsonadam99)" required/>
+            </div>
         </div>
-        <div class="register-form__field">
-            <label for="Email">Email</label>
-            <input type="text" name="Email" required/>
-        </div>
-        <div class="register-form__field">
-            <label for="Username">Username</label>
-            <input type="text" name="Username" required/>
-        </div>
-        <div class="register-form__field">
-            <label for="Password">Password</label>
-            <input type="password" name="Password" required/>
-        </div>
-        <div class="register-form__field">
-            <label for="ConfirmPassword">Confirm Password</label>
-            <input type="password" name="ConfirmPassword" required/>
-        </div>
-    </div>
-
-    <div class="register-form__section">
-        <div class="register-form__field">
-            <label for="DurationType">How should budget period durations be handled?</label>
-            <select name="DurationType">
-                <option value="CreateUserViewModel.DURATION_TYPE_BOOKENDED">Start/End Dates of Month</option>
-                <option value="CreateUserViewModel.DURATION_TYPE_DAYSPAN">Set Number of Days</option>
-            </select>
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="Password">Password:</label>
+                <input type="password" name="Password" placeholder="Password" required/>
+            </div>
+            <div class="register-form__field">
+                <label for="ConfirmPassword">Confirm Password:</label>
+                <input type="password" name="ConfirmPassword" placeholder="Password Again" required/>
+            </div>
         </div>
     </div>
 
     <div class="register-form__section">
-        <div class="register-form__field">
-            <label for="FirstName">Starting Day</label>
-            <input type="number" name="StartDayOfMonth"/>
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="FirstName">Name of Budget:</label>
+                <input type="text" name="RootBudgetName" placeholder="(ex. Grocieries)" required/>
+            </div>
         </div>
-        <div class="register-form__field">
-            <label for="LastName">Ending Day</label>
-            <input type="number" name="EndDayOfMonth"/>
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="SetAmount">Set Amount:</label>
+                <input type="number" step="0.01" name="SetAmount" placeholder="(ex. $250)" />
+            </div>
+            <div class="register-form__field">
+                <label for="InitialBalance">Initial Balance:</label>
+                <input type="number" step="0.01" name="InitialBalance" placeholder="(ex. $150)" />
+            </div>
         </div>
     </div>
 
     <div class="register-form__section">
-        <div class="register-form__field">
-            <label for="FirstName">Number of Days</label>
-            <input type="number" name="NumberDays"/>
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="DurationType">How should budget period durations be handled?</label>
+                <select name="DurationType">
+                    <option value="CreateUserViewModel.DURATION_TYPE_BOOKENDED">Start/End Dates of Month</option>
+                    <option value="CreateUserViewModel.DURATION_TYPE_DAYSPAN">Set Number of Days</option>
+                </select>
+            </div>
         </div>
     </div>
 
     <div class="register-form__section">
-        <div class="register-form__field">
-            <label for="FirstName">Name of Budget</label>
-            <input type="text" name="RootBudgetName" required/>
-        </div>
-        <div class="register-form__field">
-            <label for="SetAmount">Set Amount</label>
-            <input type="number" step="0.01" name="SetAmount"/>
-        </div>
-        <div class="register-form__field">
-            <label for="InitialBalance">Initial Balance</label>
-            <input type="number" step="0.01" name="InitialBalance"/>
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="FirstName">Starting Day:</label>
+                <input type="number" name="StartDayOfMonth" placeholder="(ex. 1)" />
+            </div>
+            <div class="register-form__field">
+                <label for="LastName">Ending Day:</label>
+                <input type="number" name="EndDayOfMonth" placeholder="(ex. 30)" />
+            </div>
         </div>
     </div>
 
-    <button type="submit" value="submit">Register</button>
+    <div class="register-form__section">
+        <div class="register-form__row">
+            <div class="register-form__field">
+                <label for="FirstName">Number of Days:</label>
+                <input type="number" name="NumberDays" placeholder="(ex. 30)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="register-form__controls">
+        <button class="btn" type="submit" value="submit">Register</button>
+    </div>
 </form>

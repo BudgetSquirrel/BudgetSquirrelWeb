@@ -1,0 +1,4 @@
+.budget-index {
+    margin-top: calc(4 * var(--spacing-unit));
+    margin-left: calc(4 * var(--spacing-unit));
+}

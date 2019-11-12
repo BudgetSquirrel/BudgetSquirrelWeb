@@ -8,22 +8,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BudgetTracker.BudgetSquirrel.Application
+namespace BudgetTracker.BudgetSquirrel.Application.Budgeting
 {
     public class BudgetService
     {
+        private BudgetCreation _budgetCreation;
         private IBudgetRepository _budgetRepository;
         private ITransactionRepository _transactionRepository;
         private IUserRepository _userRepository;
         private BudgetPeriodCalculator _budgetPeriodCalculator;
 
         public BudgetService(IBudgetRepository budgetRepo, IUserRepository userRepo,
-            ITransactionRepository transactionRepo,
+            ITransactionRepository transactionRepo, BudgetCreation budgetCreation,
             BudgetPeriodCalculator budgetPeriodCalculator)
         {
             _budgetRepository = budgetRepo;
             _transactionRepository = transactionRepo;
             _userRepository = userRepo;
+            _budgetCreation = budgetCreation;
             _budgetPeriodCalculator = budgetPeriodCalculator;
         }
 
@@ -79,7 +81,7 @@ namespace BudgetTracker.BudgetSquirrel.Application
 
         public async Task<Budget> CreateSubBudget(SubBudgetCreationViewModel input, User owner)
         {
-            Budget created = await BudgetCreation.CreateBudgetForUser(input.ToDomain(), owner, _budgetRepository);
+            Budget created = await _budgetCreation.CreateBudgetForUser(input.ToDomain(), owner);
             return created;
         }
 
