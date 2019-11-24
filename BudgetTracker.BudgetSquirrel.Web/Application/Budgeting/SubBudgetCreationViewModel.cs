@@ -17,9 +17,9 @@ namespace BudgetTracker.BudgetSquirrel.Application.Budgeting
 
         public SubBudgetCreationViewModel() {}
 
-        public override Budget ToDomain()
+        public override CreateBudgetRequestMessage ToCreateMessage()
         {
-            Budget budget = base.ToDomain();
+            CreateBudgetRequestMessage budget = base.ToCreateMessage();
             budget.ParentBudgetId = ParentBudgetId;
             return budget;
         }

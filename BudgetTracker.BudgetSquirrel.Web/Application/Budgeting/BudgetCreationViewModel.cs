@@ -12,9 +12,9 @@ namespace BudgetTracker.BudgetSquirrel.Application.Budgeting
         public double? PercentAmount { get; set; }
         public decimal? SetAmount { get; set; }
 
-        public virtual Budget ToDomain()
+        public virtual CreateBudgetRequestMessage ToCreateMessage()
         {
-            Budget budget = new Budget()
+            CreateBudgetRequestMessage budget = new CreateBudgetRequestMessage()
             {
                 Name = Name,
                 PercentAmount = PercentAmount,

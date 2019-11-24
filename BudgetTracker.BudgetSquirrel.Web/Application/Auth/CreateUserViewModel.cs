@@ -54,13 +54,13 @@ namespace BudgetTracker.BudgetSquirrel.Application.Auth
             return user;
         }
 
-        public BudgetDurationBase GetBudgetDuration()
+        public BudgetDurationBaseMessage GetBudgetDuration()
         {
-            BudgetDurationBase duration;
+            BudgetDurationBaseMessage duration;
 
             if (DurationType == DURATION_TYPE_BOOKENDED)
             {
-                duration = new MonthlyBookEndedDuration()
+                duration = new MonthlyBookEndedDurationMessage()
                 {
                     StartDayOfMonth = StartDayOfMonth,
                     EndDayOfMonth = EndDayOfMonth,
@@ -70,7 +70,7 @@ namespace BudgetTracker.BudgetSquirrel.Application.Auth
             }
             else
             {
-                duration = new MonthlyDaySpanDuration()
+                duration = new MonthlyDaySpanDurationMessage()
                 {
                     NumberDays = NumberDays
                 };
@@ -79,14 +79,14 @@ namespace BudgetTracker.BudgetSquirrel.Application.Auth
             return duration;
         }
 
-        public Budget GetRootBudget()
+        public CreateBudgetRequestMessage GetRootBudget()
         {
-            Budget budget = new Budget()
+            CreateBudgetRequestMessage budget = new CreateBudgetRequestMessage()
             {
                 Name = RootBudgetName,
                 PercentAmount = PercentAmount,
                 SetAmount = SetAmount,
-                FundBalance = InitialBalance,
+                StartingBalance = InitialBalance,
                 BudgetStart = RootBudgetStart,
                 Duration = GetBudgetDuration()
             };

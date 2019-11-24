@@ -25,7 +25,7 @@ namespace BudgetTracker.BudgetSquirrel.Application.Auth
             User user = setupInput.GetUser();
             bool userCreated = await _userRepository.Register(user);
             User createdUser = await _userRepository.GetByUsername(user.Username);
-            Budget budgetToCreate = setupInput.GetRootBudget();
+            CreateBudgetRequestMessage budgetToCreate = setupInput.GetRootBudget();
             Budget rootBudget = await _budgetCreator.CreateBudgetForUser(budgetToCreate, createdUser);
             return (createdUser, rootBudget);
         }

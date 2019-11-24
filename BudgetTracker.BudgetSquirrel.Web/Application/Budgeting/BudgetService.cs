@@ -81,7 +81,7 @@ namespace BudgetTracker.BudgetSquirrel.Application.Budgeting
 
         public async Task<Budget> CreateSubBudget(SubBudgetCreationViewModel input, User owner)
         {
-            Budget created = await _budgetCreation.CreateBudgetForUser(input.ToDomain(), owner);
+            Budget created = await _budgetCreation.CreateBudgetForUser(input.ToCreateMessage(), owner);
             return created;
         }
 

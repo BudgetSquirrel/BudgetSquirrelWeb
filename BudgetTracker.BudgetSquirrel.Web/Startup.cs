@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BudgetTracker.Business.Budgeting;
+using BudgetTracker.Business.Converters.BudgetConverters;
 
 namespace BudgetTracker.BudgetSquirrel.Web
 {
@@ -83,6 +84,8 @@ namespace BudgetTracker.BudgetSquirrel.Web
         {
             services.AddTransient<BudgetPeriodCalculator>();
             services.AddTransient<BudgetCreation>();
+            services.AddTransient<BudgetValidator>();
+            services.AddTransient<BudgetMessageConverter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
